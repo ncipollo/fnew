@@ -7,6 +7,16 @@ import (
 
 type Manifest map[string]url.URL
 
+func FromJSON(data []byte) (Manifest, error) {
+	manifest := Manifest{}
+	err := json.Unmarshal(data, &manifest)
+	return manifest, err
+}
+
+func FromString(jsonString string) (Manifest, error) {
+	return FromJSON([]byte(jsonString))
+}
+
 func (manifest Manifest) MarshalJSON() ([]byte, error) {
 	rawManifest := map[string]string{}
 	for key, repoUrl := range manifest {

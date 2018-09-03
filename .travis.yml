@@ -1,3 +1,4 @@
 language: go
-  go:
+
+go:
   - "1.10.3"

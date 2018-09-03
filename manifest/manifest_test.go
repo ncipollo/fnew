@@ -12,7 +12,7 @@ const (
   "project2": "http://www.example2.com"
 }`
 	invalidJSON = `{blarg`
-	invaldUrl = `{"project1" : "http]://blarg:foo.[]"}`
+	invalidUrl = `{"project1" : "http]://blarg:foo.[]"}`
 )
 
 func TestFromString_FailsToParseInvalidJson(t *testing.T) {
@@ -22,7 +22,7 @@ func TestFromString_FailsToParseInvalidJson(t *testing.T) {
 }
 
 func TestFromString_FailsToParseInvalidUrl(t *testing.T) {
-	_, err := FromString(invaldUrl)
+	_, err := FromString(invalidUrl)
 
 	assert.Error(t, err)
 }

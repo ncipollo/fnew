@@ -7,15 +7,12 @@ import (
 )
 
 const (
-	validJSON = `
-{
-	"repo": "http://www.example.com",
-	"manifest":	
-	{
-		"project1" : "http://www.example.com"
-	}
-}
-`
+	validJSON = `{
+  "repo": "http://www.example.com",
+  "manifest": {
+    "project1": "http://www.example.com"
+  }
+}`
 	invalidJSON = `{blarg`
 	invaldUrl   = `{"repo" : "http]://blarg:foo.[]"}`
 )
@@ -44,6 +41,12 @@ func TestFromString_ParsesJSON(t *testing.T) {
 
 	assert.Equal(t, expectedConfig(), parsedManifest)
 	assert.NoError(t, err)
+}
+
+func TestString(t *testing.T) {
+	jsonString := expectedConfig().String()
+
+	assert.Equal(t, validJSON, jsonString)
 }
 
 func expectedConfig() Config {

@@ -26,7 +26,15 @@ func FromString(jsonString string) (Config, error) {
 	return FromJSON([]byte(jsonString))
 }
 
-func (config *Config) MarshalJSON() ([]byte, error) {
+func (config Config) String() string {
+	bytes, err := json.MarshalIndent(config, "", "  ")
+	if err != nil {
+		return ""
+	}
+	return string(bytes)
+}
+
+func (config Config) MarshalJSON() ([]byte, error) {
 	rawConfig := rawConfig{
 		ManifestRepoUrl: config.ManifestRepoUrl.String(),
 		Manifest:        config.Manifest,

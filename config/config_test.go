@@ -32,6 +32,13 @@ func TestFromString_FailsToParseInvalidUrl(t *testing.T) {
 	assert.Error(t, err)
 }
 
+func TestFromString_ParsesEmptyJSON(t *testing.T) {
+	parsedManifest, err := FromString("{}")
+
+	assert.Equal(t, Config{Manifest: map[string]url.URL{}}, parsedManifest)
+	assert.NoError(t, err)
+}
+
 func TestFromString_ParsesJSON(t *testing.T) {
 	parsedManifest, err := FromString(validJSON)
 

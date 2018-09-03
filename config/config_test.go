@@ -50,7 +50,7 @@ func TestString(t *testing.T) {
 }
 
 func expectedConfig() Config {
-	repoUrl, _ := url.Parse("http://www.example.co1m")
+	repoUrl, _ := url.Parse("http://www.example.com")
 	return Config{
 		ManifestRepoUrl: repoUrl,
 		Manifest: map[string]url.URL{

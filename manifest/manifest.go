@@ -17,6 +17,14 @@ func FromString(jsonString string) (Manifest, error) {
 	return FromJSON([]byte(jsonString))
 }
 
+func (manifest Manifest) String() string {
+	bytes, err := json.MarshalIndent(manifest, "", "  ")
+	if err != nil {
+		return ""
+	}
+	return string(bytes)
+}
+
 func (manifest Manifest) MarshalJSON() ([]byte, error) {
 	rawManifest := map[string]string{}
 	for key, repoUrl := range manifest {

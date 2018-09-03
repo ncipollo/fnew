@@ -7,14 +7,14 @@ import (
 )
 
 const (
-	validJSON = `{
-"project1" : "http://www.example1.com",
-"project2" : "http://www.example2.com"
-}`
+	validJSON = `
+{
+	"project1" : "http://www.example1.com",
+	"project2" : "http://www.example2.com"
+}
+`
 	invalidJSON = `{blarg`
-	invaldUrl = `{
-"project1" : "http]://blarg:foo.[]"
-}`
+	invaldUrl = `{"project1" : "http]://blarg:foo.[]"}`
 )
 
 func TestFromString_FailsToParseInvalidJson(t *testing.T) {

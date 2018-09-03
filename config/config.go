@@ -12,8 +12,18 @@ type Config struct {
 }
 
 type rawConfig struct {
-	ManifestRepoUrl string            `json:"manifest_repo_url,omitempty"`
+	ManifestRepoUrl string            `json:"repo,omitempty"`
 	Manifest        manifest.Manifest `json:"manifest,omitempty"`
+}
+
+func FromJSON(data []byte) (Config, error) {
+	config := Config{}
+	err := json.Unmarshal(data, &config)
+	return config, err
+}
+
+func FromString(jsonString string) (Config, error) {
+	return FromJSON([]byte(jsonString))
 }
 
 func (config *Config) MarshalJSON() ([]byte, error) {
@@ -26,7 +36,7 @@ func (config *Config) MarshalJSON() ([]byte, error) {
 }
 
 func (config *Config) UnmarshalJSON(data []byte) error {
-	var rawConfig rawConfig
+	rawConfig := rawConfig{Manifest: map[string]url.URL{}}
 	err := json.Unmarshal(data, &rawConfig)
 	if err != nil {
 		return err

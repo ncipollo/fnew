@@ -17,6 +17,17 @@ func FromString(jsonString string) (Manifest, error) {
 	return FromJSON([]byte(jsonString))
 }
 
+func (manifest Manifest) Merge(other Manifest) Manifest {
+	merged := Manifest{}
+	for key, value := range manifest {
+		merged[key] = value
+	}
+	for key, value := range other {
+		merged[key] = value
+	}
+	return merged
+}
+
 func (manifest Manifest) String() string {
 	bytes, err := json.MarshalIndent(manifest, "", "  ")
 	if err != nil {

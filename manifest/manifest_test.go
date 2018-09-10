@@ -18,6 +18,10 @@ const (
 var url1, _ = url.Parse("http://www.example1.com")
 var url2, _ = url.Parse("http://www.example2.com")
 
+func TestDefaultRepository(t *testing.T) {
+	assert.Equal(t, "https://github.com/ncipollo/fnew-manifest.git", DEFAULT_REPOSITORY)
+}
+
 func TestFromString_FailsToParseInvalidJson(t *testing.T) {
 	_, err := FromString(invalidJSON)
 

@@ -13,3 +13,8 @@ func Directory() string {
 	}
 	return path.Join(currentUser.HomeDir, ".fnew")
 }
+
+type DirectoryCreator interface {
+	CreateDirectory(dir string) error
+}
+

@@ -1,7 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"github.com/ncipollo/fnew/workspace"
+	"fmt"
+)
 
 func main() {
-	fmt.Printf("Hello, world.\n")
+	appWorkspace := workspace.New(workspace.Directory(), workspace.OSDirectoryCreator())
+	appWorkspace.Setup()
+	fmt.Printf("Created ~/.fnew")
 }

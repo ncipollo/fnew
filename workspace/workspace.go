@@ -16,15 +16,20 @@ func New(basePath string, creator DirectoryCreator) Workspace {
 	return Workspace{BasePath: basePath, DirectoryCreator: creator}
 }
 
-func (workspace Workspace ) Setup() error {
-	return workspace.DirectoryCreator.CreateDirectory(workspace.BasePath)
+func (workspace Workspace) Setup() error {
+	err := workspace.DirectoryCreator.CreateDirectory(workspace.ConfigPath())
+	if err != nil {
+		return err
+	}
+	err = workspace.DirectoryCreator.CreateDirectory(workspace.ManifestsPath())
+	return err
 }
 
-func (workspace Workspace ) ConfigPath() string {
+func (workspace Workspace) ConfigPath() string {
 	return path.Join(workspace.BasePath, "config.json")
 }
 
-func (workspace Workspace ) ManifestsPath() string {
+func (workspace Workspace) ManifestsPath() string {
 	return path.Join(workspace.BasePath, "manifests")
 }
 
@@ -47,5 +52,5 @@ type DirectoryCreator interface {
 type osDirectoryCreator struct{}
 
 func (osDirectoryCreator) CreateDirectory(dir string) error {
-	return os.Mkdir(dir, 777)
+	return os.MkdirAll(dir, 777)
 }

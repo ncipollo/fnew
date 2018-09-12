@@ -9,7 +9,7 @@ import (
 	"errors"
 )
 
-const BASE_PATH = "/test"
+const BasePath = "/test"
 
 func TestDirectory(t *testing.T) {
 	currentUser, err := user.Current()
@@ -20,15 +20,35 @@ func TestDirectory(t *testing.T) {
 }
 
 func TestWorkspace_ConfigPath(t *testing.T) {
-	testWorkSpace := createWorkSpace(false)
+	creator := createDirectoryCreator(false)
+	testWorkSpace := createWorkSpace(creator)
 
 	assert.Equal(t, "/test/config.json", testWorkSpace.ConfigPath())
 }
 
 func TestWorkspace_ManifestsPath(t *testing.T) {
-	testWorkSpace := createWorkSpace(false)
+	creator := createDirectoryCreator(false)
+	testWorkSpace := createWorkSpace(creator)
 
 	assert.Equal(t, "/test/manifests", testWorkSpace.ManifestsPath())
+}
+
+func TestWorkspace_Setup_Error(t *testing.T) {
+	creator := createDirectoryCreator(true)
+	testWorkSpace := createWorkSpace(creator)
+
+	testWorkSpace.Setup()
+
+	creator.AssertExpectations(t)
+}
+
+func TestWorkspace_Setup_NoError(t *testing.T) {
+	creator := createDirectoryCreator(false)
+	testWorkSpace := createWorkSpace(creator)
+
+	testWorkSpace.Setup()
+
+	creator.AssertExpectations(t)
 }
 
 type MockDirectoryCreator struct {
@@ -40,17 +60,17 @@ func (creator MockDirectoryCreator) CreateDirectory(dir string) error {
 	return args.Error(0)
 }
 
-func createWorkSpace(shouldError bool) Workspace {
-	creator := createDirectoryCreator(shouldError)
-	return New(BASE_PATH, creator)
+func createWorkSpace(creator MockDirectoryCreator) Workspace {
+	return New(BasePath, creator)
 }
 
-func createDirectoryCreator(shouldError bool) DirectoryCreator {
+func createDirectoryCreator(shouldError bool) MockDirectoryCreator {
 	creator := new(MockDirectoryCreator)
 	if shouldError {
-		creator.On("CreateDirectory").Return(errors.New("I am err"))
+		creator.On("CreateDirectory", "/test/config.json").Return(errors.New("I am err"))
 	} else {
-		creator.On("CreateDirectory").Return(nil)
+		creator.On("CreateDirectory", "/test/config.json").Return(nil)
+		creator.On("CreateDirectory", "/test/manifests").Return(nil)
 	}
-	return creator
+	return *creator
 }

@@ -17,12 +17,7 @@ func New(basePath string, creator DirectoryCreator) Workspace {
 }
 
 func (workspace Workspace) Setup() error {
-	err := workspace.DirectoryCreator.CreateDirectory(workspace.ConfigPath())
-	if err != nil {
-		return err
-	}
-	err = workspace.DirectoryCreator.CreateDirectory(workspace.ManifestsPath())
-	return err
+	return workspace.DirectoryCreator.CreateDirectory(workspace.ManifestsPath())
 }
 
 func (workspace Workspace) ConfigPath() string {
@@ -52,5 +47,5 @@ type DirectoryCreator interface {
 type osDirectoryCreator struct{}
 
 func (osDirectoryCreator) CreateDirectory(dir string) error {
-	return os.MkdirAll(dir, 777)
+	return os.MkdirAll(dir, 0777)
 }

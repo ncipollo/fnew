@@ -7,6 +7,6 @@ import (
 
 func main() {
 	appWorkspace := workspace.New(workspace.Directory(), workspace.OSDirectoryCreator())
-	appWorkspace.Setup()
-	fmt.Printf("Created ~/.fnew")
+	err := appWorkspace.Setup()
+	fmt.Printf("Error: %v", err)
 }

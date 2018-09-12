@@ -67,9 +67,8 @@ func createWorkSpace(creator MockDirectoryCreator) Workspace {
 func createDirectoryCreator(shouldError bool) MockDirectoryCreator {
 	creator := new(MockDirectoryCreator)
 	if shouldError {
-		creator.On("CreateDirectory", "/test/config.json").Return(errors.New("I am err"))
+		creator.On("CreateDirectory", "/test/manifests").Return(errors.New("I am err"))
 	} else {
-		creator.On("CreateDirectory", "/test/config.json").Return(nil)
 		creator.On("CreateDirectory", "/test/manifests").Return(nil)
 	}
 	return *creator

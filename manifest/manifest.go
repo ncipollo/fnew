@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 )
 
-const DEFAULT_REPOSITORY = "https://github.com/ncipollo/fnew-manifest.git"
+const DefaultRepository = "https://github.com/ncipollo/fnew-manifest.git"
 
 type Manifest map[string]url.URL
 

@@ -4,6 +4,8 @@ import (
 	"net/url"
 	"github.com/ncipollo/fnew/manifest"
 	"encoding/json"
+	"io/ioutil"
+	"os"
 )
 
 type Config struct {
@@ -16,14 +18,30 @@ type rawConfig struct {
 	Manifest        manifest.Manifest `json:"manifest,omitempty"`
 }
 
-func FromJSON(data []byte) (Config, error) {
-	config := Config{}
-	err := json.Unmarshal(data, &config)
-	return config, err
+func FromFile(filename string) (*Config, error) {
+	data, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+	return FromJSON(data)
 }
 
-func FromString(jsonString string) (Config, error) {
+func FromJSON(data []byte) (*Config, error) {
+	config := Config{}
+	err := json.Unmarshal(data, &config)
+	if err != nil {
+		return nil, err
+	}
+	return &config, nil
+}
+
+func FromString(jsonString string) (*Config, error) {
 	return FromJSON([]byte(jsonString))
+}
+
+func (config Config) WriteToFile(filename string, perm os.FileMode) error {
+	jsonString := config.String()
+	return ioutil.WriteFile(filename, []byte(jsonString), perm)
 }
 
 func (config Config) String() string {

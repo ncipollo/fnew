@@ -4,6 +4,9 @@ import (
 	"testing"
 	"github.com/stretchr/testify/assert"
 	"net/url"
+	"io/ioutil"
+	"os"
+	"path/filepath"
 )
 
 const (
@@ -14,8 +17,23 @@ const (
   }
 }`
 	invalidJSON = `{blarg`
-	invaldUrl   = `{"repo" : "http]://blarg:foo.[]"}`
+	invalidUrl  = `{"repo" : "http]://blarg:foo.[]"}`
 )
+
+func TestFromFile(t *testing.T) {
+	testDir, err := ioutil.TempDir("", "config")
+	assert.NoError(t, err)
+
+	defer os.RemoveAll(testDir)
+
+	configPath := filepath.Join(testDir, "config.json")
+	sourceConfig := expectedConfig()
+	sourceConfig.WriteToFile(configPath, 0777)
+
+	fileConfig, err := FromFile(configPath)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedConfig(), fileConfig)
+}
 
 func TestFromString_FailsToParseInvalidJson(t *testing.T) {
 	_, err := FromString(invalidJSON)
@@ -24,7 +42,7 @@ func TestFromString_FailsToParseInvalidJson(t *testing.T) {
 }
 
 func TestFromString_FailsToParseInvalidUrl(t *testing.T) {
-	_, err := FromString(invaldUrl)
+	_, err := FromString(invalidUrl)
 
 	assert.Error(t, err)
 }
@@ -32,7 +50,7 @@ func TestFromString_FailsToParseInvalidUrl(t *testing.T) {
 func TestFromString_ParsesEmptyJSON(t *testing.T) {
 	parsedManifest, err := FromString("{}")
 
-	assert.Equal(t, Config{Manifest: map[string]url.URL{}}, parsedManifest)
+	assert.Equal(t, &Config{Manifest: map[string]url.URL{}}, parsedManifest)
 	assert.NoError(t, err)
 }
 
@@ -49,9 +67,9 @@ func TestString(t *testing.T) {
 	assert.Equal(t, validJSON, jsonString)
 }
 
-func expectedConfig() Config {
+func expectedConfig() *Config {
 	repoUrl, _ := url.Parse("http://www.example.com")
-	return Config{
+	return &Config{
 		ManifestRepoUrl: repoUrl,
 		Manifest: map[string]url.URL{
 			"project1": *repoUrl,

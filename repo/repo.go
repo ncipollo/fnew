@@ -1,6 +1,9 @@
 package repo
 
-import "gopkg.in/src-d/go-git.v4"
+import (
+	"gopkg.in/src-d/go-git.v4"
+	"os"
+)
 
 type Repo interface {
 	Clone(localPath string, repoUrl string) (*git.Repository, error)
@@ -19,6 +22,7 @@ func (GitRepo) Clone(localPath string, repoUrl string) (*git.Repository, error) 
 	return git.PlainClone(localPath, false, &git.CloneOptions{
 		URL:               repoUrl,
 		RecurseSubmodules: git.DefaultSubmoduleRecursionDepth,
+		Progress:          os.Stdout,
 	})
 }
 

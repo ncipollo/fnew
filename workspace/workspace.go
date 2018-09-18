@@ -49,3 +49,20 @@ type osDirectoryCreator struct{}
 func (osDirectoryCreator) CreateDirectory(dir string) error {
 	return os.MkdirAll(dir, 0777)
 }
+
+type DirectoryChecker interface {
+	DirectoryExists(dir string) bool
+}
+
+type osDirectoryChecker struct{}
+
+func (osDirectoryChecker) DirectoryExists(dir string) bool {
+	_, err := os.Stat(dir)
+	if err == nil {
+		return true
+	}
+	if os.IsNotExist(err) {
+		return false
+	}
+	return true
+}

@@ -5,6 +5,7 @@ import (
 	"os/user"
 	"github.com/stretchr/testify/assert"
 	"path"
+	"errors"
 )
 
 func TestDirectory(t *testing.T) {
@@ -45,4 +46,18 @@ func TestWorkspace_Setup_NoError(t *testing.T) {
 	testWorkSpace.Setup()
 
 	creator.AssertExpectations(t)
+}
+
+func createWorkSpace(creator MockDirectoryCreator) Workspace {
+	return New(BasePath, creator)
+}
+
+func createDirectoryCreator(shouldError bool) MockDirectoryCreator {
+	creator := new(MockDirectoryCreator)
+	if shouldError {
+		creator.On("CreateDirectory", "/test/manifests").Return(errors.New("I am err"))
+	} else {
+		creator.On("CreateDirectory", "/test/manifests").Return(nil)
+	}
+	return *creator
 }

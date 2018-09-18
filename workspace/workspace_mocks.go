@@ -2,7 +2,6 @@ package workspace
 
 import (
 	"github.com/stretchr/testify/mock"
-	"errors"
 )
 
 const BasePath = "/test"
@@ -16,16 +15,13 @@ func (creator MockDirectoryCreator) CreateDirectory(dir string) error {
 	return args.Error(0)
 }
 
-func createWorkSpace(creator MockDirectoryCreator) Workspace {
-	return New(BasePath, creator)
+type MockDirectoryChecker struct {
+	mock.Mock
 }
 
-func createDirectoryCreator(shouldError bool) MockDirectoryCreator {
-	creator := new(MockDirectoryCreator)
-	if shouldError {
-		creator.On("CreateDirectory", "/test/manifests").Return(errors.New("I am err"))
-	} else {
-		creator.On("CreateDirectory", "/test/manifests").Return(nil)
-	}
-	return *creator
+func (checker MockDirectoryChecker) DirectoryExists(dir string) bool {
+	args := checker.Called(dir)
+	return args.Bool(0)
 }
+
+

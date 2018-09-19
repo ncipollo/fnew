@@ -5,31 +5,45 @@ import (
 	"path"
 	"fmt"
 	"os"
+	"github.com/ncipollo/fnew/manifest"
 )
 
 type Workspace struct {
-	BasePath         string
-	DirectoryCreator DirectoryCreator
+	basePath         string
+	directoryChecker DirectoryChecker
+	directoryCreator DirectoryCreator
 }
 
-func New(basePath string, creator DirectoryCreator) Workspace {
-	return Workspace{BasePath: basePath, DirectoryCreator: creator}
+func New(basePath string, checker DirectoryChecker, creator DirectoryCreator) Workspace {
+	return Workspace{basePath: basePath, directoryChecker: checker, directoryCreator: creator}
 }
 
 func (workspace Workspace) Setup() error {
-	return workspace.DirectoryCreator.CreateDirectory(workspace.ManifestsPath())
+	return workspace.directoryCreator.CreateDirectory(workspace.ManifestsPath())
 }
 
 func (workspace Workspace) ConfigPath() string {
-	return path.Join(workspace.BasePath, "config.json")
+	return path.Join(workspace.basePath, "config.json")
 }
 
 func (workspace Workspace) ManifestsPath() string {
-	return path.Join(workspace.BasePath, "manifests")
+	return path.Join(workspace.basePath, "manifests")
 }
 
-func OSDirectoryCreator() DirectoryCreator {
-	return osDirectoryCreator{}
+func (workspace Workspace) ConfigManifestRepoPath() string {
+	return path.Join(workspace.ManifestsPath(), manifest.ConfigDirectory)
+}
+
+func (workspace Workspace) ConfigManifestRepoExists() bool {
+	return workspace.directoryChecker.DirectoryExists(workspace.ConfigManifestRepoPath())
+}
+
+func (workspace Workspace) DefaultManifestRepoPath() string {
+	return path.Join(workspace.ManifestsPath(), manifest.DefaultDirectory)
+}
+
+func (workspace Workspace) DefaultManifestRepoExists() bool {
+	return workspace.directoryChecker.DirectoryExists(workspace.DefaultManifestRepoPath())
 }
 
 func Directory() string {
@@ -46,6 +60,10 @@ type DirectoryCreator interface {
 
 type osDirectoryCreator struct{}
 
+func OSDirectoryCreator() DirectoryCreator {
+	return osDirectoryCreator{}
+}
+
 func (osDirectoryCreator) CreateDirectory(dir string) error {
 	return os.MkdirAll(dir, 0777)
 }
@@ -55,6 +73,10 @@ type DirectoryChecker interface {
 }
 
 type osDirectoryChecker struct{}
+
+func OSDirectoryChecker() DirectoryChecker {
+	return osDirectoryChecker{}
+}
 
 func (osDirectoryChecker) DirectoryExists(dir string) bool {
 	_, err := os.Stat(dir)

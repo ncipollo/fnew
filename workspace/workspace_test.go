@@ -5,7 +5,6 @@ import (
 	"os/user"
 	"github.com/stretchr/testify/assert"
 	"path"
-	"errors"
 )
 
 func TestDirectory(t *testing.T) {
@@ -17,22 +16,73 @@ func TestDirectory(t *testing.T) {
 }
 
 func TestWorkspace_ConfigPath(t *testing.T) {
-	creator := createDirectoryCreator(false)
-	testWorkSpace := createWorkSpace(creator)
+	checker := createMockDirectoryChecker(true)
+	creator := createMockDirectoryCreator(false)
+	testWorkSpace := createMockWorkSpace(checker, creator)
 
 	assert.Equal(t, "/test/config.json", testWorkSpace.ConfigPath())
 }
 
 func TestWorkspace_ManifestsPath(t *testing.T) {
-	creator := createDirectoryCreator(false)
-	testWorkSpace := createWorkSpace(creator)
+	checker := createMockDirectoryChecker(true)
+	creator := createMockDirectoryCreator(false)
+	testWorkSpace := createMockWorkSpace(checker, creator)
 
 	assert.Equal(t, "/test/manifests", testWorkSpace.ManifestsPath())
 }
 
+func TestWorkspace_ConfigManifestRepoPath(t *testing.T) {
+	checker := createMockDirectoryChecker(true)
+	creator := createMockDirectoryCreator(false)
+	testWorkSpace := createMockWorkSpace(checker, creator)
+
+	assert.Equal(t, "/test/manifests/config", testWorkSpace.ConfigManifestRepoPath())
+}
+
+func TestWorkspace_ConfigManifestRepoExists(t *testing.T) {
+	checker := createMockDirectoryChecker(true)
+	creator := createMockDirectoryCreator(false)
+	testWorkSpace := createMockWorkSpace(checker, creator)
+
+	assert.True(t, testWorkSpace.ConfigManifestRepoExists())
+}
+
+func TestWorkspace_ConfigManifestRepoDoesNotExists(t *testing.T) {
+	checker := createMockDirectoryChecker(false)
+	creator := createMockDirectoryCreator(false)
+	testWorkSpace := createMockWorkSpace(checker, creator)
+
+	assert.False(t, testWorkSpace.ConfigManifestRepoExists())
+}
+
+func TestWorkspace_DefaultManifestRepoPath(t *testing.T) {
+	checker := createMockDirectoryChecker(true)
+	creator := createMockDirectoryCreator(false)
+	testWorkSpace := createMockWorkSpace(checker, creator)
+
+	assert.Equal(t, "/test/manifests/default", testWorkSpace.DefaultManifestRepoPath())
+}
+
+func TestWorkspace_DefaultManifestRepoExists(t *testing.T) {
+	checker := createMockDirectoryChecker(true)
+	creator := createMockDirectoryCreator(false)
+	testWorkSpace := createMockWorkSpace(checker, creator)
+
+	assert.True(t, testWorkSpace.DefaultManifestRepoExists())
+}
+
+func TestWorkspace_DefaultManifestRepoDoesNotExists(t *testing.T) {
+	checker := createMockDirectoryChecker(false)
+	creator := createMockDirectoryCreator(false)
+	testWorkSpace := createMockWorkSpace(checker, creator)
+
+	assert.False(t, testWorkSpace.DefaultManifestRepoExists())
+}
+
 func TestWorkspace_Setup_Error(t *testing.T) {
-	creator := createDirectoryCreator(true)
-	testWorkSpace := createWorkSpace(creator)
+	checker := createMockDirectoryChecker(true)
+	creator := createMockDirectoryCreator(true)
+	testWorkSpace := createMockWorkSpace(checker, creator)
 
 	testWorkSpace.Setup()
 
@@ -40,24 +90,11 @@ func TestWorkspace_Setup_Error(t *testing.T) {
 }
 
 func TestWorkspace_Setup_NoError(t *testing.T) {
-	creator := createDirectoryCreator(false)
-	testWorkSpace := createWorkSpace(creator)
+	checker := createMockDirectoryChecker(true)
+	creator := createMockDirectoryCreator(false)
+	testWorkSpace := createMockWorkSpace(checker, creator)
 
 	testWorkSpace.Setup()
 
 	creator.AssertExpectations(t)
-}
-
-func createWorkSpace(creator MockDirectoryCreator) Workspace {
-	return New(BasePath, creator)
-}
-
-func createDirectoryCreator(shouldError bool) MockDirectoryCreator {
-	creator := new(MockDirectoryCreator)
-	if shouldError {
-		creator.On("CreateDirectory", "/test/manifests").Return(errors.New("I am err"))
-	} else {
-		creator.On("CreateDirectory", "/test/manifests").Return(nil)
-	}
-	return *creator
 }

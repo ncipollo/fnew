@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 )
 
+const ConfigDirectory  =  "config"
+const DefaultDirectory = "default"
 const DefaultRepository = "https://github.com/ncipollo/fnew-manifest.git"
 
 type Manifest map[string]url.URL

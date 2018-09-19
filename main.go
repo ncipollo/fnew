@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	appWorkspace := workspace.New(workspace.Directory(), workspace.OSDirectoryCreator())
+	appWorkspace := workspace.New(workspace.Directory(), workspace.OSDirectoryChecker(), workspace.OSDirectoryCreator())
 	err := appWorkspace.Setup()
 	fmt.Printf("Workspace Error: %v", err)
 

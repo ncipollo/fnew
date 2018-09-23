@@ -1,12 +1,21 @@
 package action
 
 import (
-	"io"
 	"github.com/ncipollo/fnew/config"
 	"github.com/ncipollo/fnew/repo"
 	"github.com/ncipollo/fnew/workspace"
 	"github.com/ncipollo/fnew/manifest"
+	"io"
 )
+
+type SetupAction struct {
+	repo      repo.Repo
+	workspace workspace.Workspace
+}
+
+func newSetupAction(repo repo.Repo, workspace workspace.Workspace) Action {
+	return &SetupAction{repo: repo, workspace: workspace}
+}
 
 func (action *SetupAction) Perform(output io.Writer) error {
 	err := action.workspace.Setup()
@@ -27,11 +36,6 @@ func (action *SetupAction) Perform(output io.Writer) error {
 		return err
 	}
 	return nil
-}
-
-type SetupAction struct {
-	repo      repo.Repo
-	workspace workspace.Workspace
 }
 
 func (action *SetupAction) fetchConfigManifestIfNeeded(userConfig *config.Config) error {

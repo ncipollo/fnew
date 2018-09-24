@@ -25,8 +25,7 @@ func (action *SetupAction) Perform(output io.Writer) error {
 	if err != nil {
 		return err
 	}
-	loader := config.NewLoader()
-	userConfig, err := loader.Load(action.workspace.ConfigPath())
+	userConfig, err := action.configLoader.Load(action.workspace.ConfigPath())
 	if err != nil {
 		return err
 	}

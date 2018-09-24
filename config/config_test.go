@@ -27,12 +27,12 @@ func TestFromFile(t *testing.T) {
 	defer os.RemoveAll(testDir)
 
 	configPath := filepath.Join(testDir, "config.json")
-	sourceConfig := expectedConfig()
+	sourceConfig := fullConfig()
 	sourceConfig.WriteToFile(configPath, 0777)
 
 	fileConfig, err := FromFile(configPath)
 	assert.NoError(t, err)
-	assert.Equal(t, expectedConfig(), fileConfig)
+	assert.Equal(t, fullConfig(), fileConfig)
 }
 
 func TestFromString_FailsToParseInvalidJson(t *testing.T) {
@@ -57,22 +57,14 @@ func TestFromString_ParsesEmptyJSON(t *testing.T) {
 func TestFromString_ParsesJSON(t *testing.T) {
 	parsedManifest, err := FromString(validJSON)
 
-	assert.Equal(t, expectedConfig(), parsedManifest)
+	assert.Equal(t, fullConfig(), parsedManifest)
 	assert.NoError(t, err)
 }
 
 func TestString(t *testing.T) {
-	jsonString := expectedConfig().String()
+	jsonString := fullConfig().String()
 
 	assert.Equal(t, validJSON, jsonString)
 }
 
-func expectedConfig() *Config {
-	repoUrl, _ := url.Parse("http://www.example.com")
-	return &Config{
-		ManifestRepoUrl: repoUrl,
-		Manifest: map[string]url.URL{
-			"project1": *repoUrl,
-		},
-	}
-}
+

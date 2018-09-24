@@ -80,3 +80,22 @@ func (config *Config) UnmarshalJSON(data []byte) error {
 
 	return nil
 }
+
+type Loader interface {
+	Load(filename string) (*Config, error)
+}
+
+type FileLoader struct{}
+
+func (FileLoader) Load(filename string) (*Config, error) {
+	data, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+	return FromJSON(data)
+}
+
+func NewLoader() Loader {
+	return &FileLoader{}
+}
+

@@ -9,12 +9,15 @@ import (
 )
 
 type SetupAction struct {
-	repo      repo.Repo
-	workspace workspace.Workspace
+	configLoader config.Loader
+	repo         repo.Repo
+	workspace    workspace.Workspace
 }
 
-func newSetupAction(repo repo.Repo, workspace workspace.Workspace) Action {
-	return &SetupAction{repo: repo, workspace: workspace}
+func newSetupAction(configLoader config.Loader,
+	repo repo.Repo,
+	workspace workspace.Workspace) Action {
+	return &SetupAction{configLoader: configLoader, repo: repo, workspace: workspace}
 }
 
 func (action *SetupAction) Perform(output io.Writer) error {
@@ -22,7 +25,8 @@ func (action *SetupAction) Perform(output io.Writer) error {
 	if err != nil {
 		return err
 	}
-	userConfig, err := config.FromFile(action.workspace.ConfigPath())
+	loader := config.NewLoader()
+	userConfig, err := loader.Load(action.workspace.ConfigPath())
 	if err != nil {
 		return err
 	}

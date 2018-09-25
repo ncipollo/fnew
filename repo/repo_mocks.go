@@ -34,8 +34,8 @@ func (repo *MockRepo) AssertCloneCalled(t *testing.T, localPath string, repoUrl 
 	repo.AssertCalled(t, "Clone", localPath, repoUrl)
 }
 
-func (repo *MockRepo) AssertCloneNotCalled(t *testing.T)  {
-	repo.AssertNotCalled(t, "Clone", mock.Anything, mock.Anything)
+func (repo *MockRepo) AssertCloneNotCalled(t *testing.T, localPath string, repoUrl string)  {
+	repo.AssertNotCalled(t, "Clone", localPath, repoUrl)
 }
 
 func (repo *MockRepo) StubClone(shouldError bool)  {

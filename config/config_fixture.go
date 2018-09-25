@@ -15,15 +15,15 @@ func (loader *MockLoader) Load(filename string) (*Config, error) {
 	return args.Get(0).(*Config), args.Error(1)
 }
 
-func MockLoaderWithRepoUrl() Loader  {
+func MockLoaderWithRepoUrl() Loader {
 	mockLoader := MockLoader{}
 	mockLoader.On("Load", mock.Anything).Return(FullConfig(), nil)
 	return &mockLoader
 }
 
-func MockLoaderWithoutRepoUrl() Loader  {
+func MockLoaderWithoutRepoUrl() Loader {
 	mockLoader := MockLoader{}
-	mockLoader.On("Load", mock.Anything).Return(MinimalConfig())
+	mockLoader.On("Load", mock.Anything).Return(MinimalConfig(), nil)
 	return &mockLoader
 }
 
@@ -40,6 +40,6 @@ func FullConfig() *Config {
 func MinimalConfig() *Config {
 	return &Config{
 		ManifestRepoUrl: nil,
-		Manifest: map[string]url.URL{},
+		Manifest:        map[string]url.URL{},
 	}
 }

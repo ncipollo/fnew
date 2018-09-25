@@ -4,6 +4,7 @@ import (
 	"github.com/stretchr/testify/mock"
 	"gopkg.in/src-d/go-git.v4"
 	"errors"
+	"testing"
 )
 
 type MockRepo struct {
@@ -29,11 +30,19 @@ func (repo *MockRepo) Pull(repository *git.Repository) error {
 	return args.Error(0)
 }
 
+func (repo *MockRepo) AssertCloneCalled(t *testing.T, localPath string, repoUrl string)  {
+	repo.AssertCalled(t, "Clone", localPath, repoUrl)
+}
+
+func (repo *MockRepo) AssertCloneNotCalled(t *testing.T)  {
+	repo.AssertNotCalled(t, "Clone", mock.Anything, mock.Anything)
+}
+
 func (repo *MockRepo) StubClone(shouldError bool)  {
 	if shouldError {
 		repo.On("Clone", mock.Anything, mock.Anything).Return(nil, errors.New("you're the clone"))
 	} else {
-		repo.On("Clone", mock.Anything, mock.Anything).Return(git.Repository{}, nil)
+		repo.On("Clone", mock.Anything, mock.Anything).Return(&git.Repository{}, nil)
 	}
 }
 

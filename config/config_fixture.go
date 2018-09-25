@@ -17,17 +17,17 @@ func (loader *MockLoader) Load(filename string) (*Config, error) {
 
 func MockLoaderWithRepoUrl() Loader  {
 	mockLoader := MockLoader{}
-	mockLoader.On("Load", mock.Anything).Return(fullConfig(), nil)
+	mockLoader.On("Load", mock.Anything).Return(FullConfig(), nil)
 	return &mockLoader
 }
 
 func MockLoaderWithoutRepoUrl() Loader  {
 	mockLoader := MockLoader{}
-	mockLoader.On("Load", mock.Anything).Return(minimalConfig())
+	mockLoader.On("Load", mock.Anything).Return(MinimalConfig())
 	return &mockLoader
 }
 
-func fullConfig() *Config {
+func FullConfig() *Config {
 	repoUrl, _ := url.Parse("http://www.example.com")
 	return &Config{
 		ManifestRepoUrl: repoUrl,
@@ -37,7 +37,7 @@ func fullConfig() *Config {
 	}
 }
 
-func minimalConfig() *Config {
+func MinimalConfig() *Config {
 	return &Config{
 		ManifestRepoUrl: nil,
 		Manifest: map[string]url.URL{},

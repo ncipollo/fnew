@@ -27,12 +27,12 @@ func TestFromFile(t *testing.T) {
 	defer os.RemoveAll(testDir)
 
 	configPath := filepath.Join(testDir, "config.json")
-	sourceConfig := fullConfig()
+	sourceConfig := FullConfig()
 	sourceConfig.WriteToFile(configPath, 0777)
 
 	fileConfig, err := FromFile(configPath)
 	assert.NoError(t, err)
-	assert.Equal(t, fullConfig(), fileConfig)
+	assert.Equal(t, FullConfig(), fileConfig)
 }
 
 func TestFromString_FailsToParseInvalidJson(t *testing.T) {
@@ -57,12 +57,12 @@ func TestFromString_ParsesEmptyJSON(t *testing.T) {
 func TestFromString_ParsesJSON(t *testing.T) {
 	parsedManifest, err := FromString(validJSON)
 
-	assert.Equal(t, fullConfig(), parsedManifest)
+	assert.Equal(t, FullConfig(), parsedManifest)
 	assert.NoError(t, err)
 }
 
 func TestString(t *testing.T) {
-	jsonString := fullConfig().String()
+	jsonString := FullConfig().String()
 
 	assert.Equal(t, validJSON, jsonString)
 }

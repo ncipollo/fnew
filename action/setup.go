@@ -14,7 +14,7 @@ type SetupAction struct {
 	workspace    workspace.Workspace
 }
 
-func newSetupAction(configLoader config.Loader,
+func NewSetupAction(configLoader config.Loader,
 	repo repo.Repo,
 	workspace workspace.Workspace) Action {
 	return &SetupAction{configLoader: configLoader, repo: repo, workspace: workspace}

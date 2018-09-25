@@ -10,7 +10,7 @@ type MockRepo struct {
 	mock.Mock
 }
 
-func newMockRepo() *MockRepo {
+func NewMockRepo() *MockRepo {
 	return &MockRepo{}
 }
 
@@ -29,7 +29,7 @@ func (repo *MockRepo) Pull(repository *git.Repository) error {
 	return args.Error(0)
 }
 
-func (repo *MockRepo) stubClone(shouldError bool)  {
+func (repo *MockRepo) StubClone(shouldError bool)  {
 	if shouldError {
 		repo.On("Clone", mock.Anything, mock.Anything).Return(nil, errors.New("you're the clone"))
 	} else {
@@ -37,7 +37,7 @@ func (repo *MockRepo) stubClone(shouldError bool)  {
 	}
 }
 
-func (repo *MockRepo) stubOpen(shouldError bool)  {
+func (repo *MockRepo) StubOpen(shouldError bool)  {
 	if shouldError {
 		repo.On("Open", mock.Anything).Return(nil, errors.New("closed"))
 	} else {
@@ -45,7 +45,7 @@ func (repo *MockRepo) stubOpen(shouldError bool)  {
 	}
 }
 
-func (repo *MockRepo) stubPull(shouldError bool)  {
+func (repo *MockRepo) StubPull(shouldError bool)  {
 	if shouldError {
 		repo.On("Pull", mock.Anything).Return(errors.New("push"))
 	} else {

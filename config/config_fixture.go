@@ -15,13 +15,13 @@ func (loader *MockLoader) Load(filename string) (*Config, error) {
 	return args.Get(0).(*Config), args.Error(1)
 }
 
-func mockLoaderWithRepoUrl() Loader  {
+func MockLoaderWithRepoUrl() Loader  {
 	mockLoader := MockLoader{}
-	mockLoader.On("Load", mock.Anything).Return(fullConfig())
+	mockLoader.On("Load", mock.Anything).Return(fullConfig(), nil)
 	return &mockLoader
 }
 
-func mockLoaderWithoutRepoUrl() Loader  {
+func MockLoaderWithoutRepoUrl() Loader  {
 	mockLoader := MockLoader{}
 	mockLoader.On("Load", mock.Anything).Return(minimalConfig())
 	return &mockLoader

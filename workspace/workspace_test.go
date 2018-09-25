@@ -16,73 +16,73 @@ func TestDirectory(t *testing.T) {
 }
 
 func TestWorkspace_ConfigPath(t *testing.T) {
-	checker := createMockDirectoryChecker(true)
-	creator := createMockDirectoryCreator(false)
-	testWorkSpace := createMockWorkSpace(checker, creator)
+	checker := CreateMockDirectoryChecker(true)
+	creator := CreateMockDirectoryCreator(false)
+	testWorkSpace := CreateMockWorkSpace(checker, creator)
 
 	assert.Equal(t, "/test/config.json", testWorkSpace.ConfigPath())
 }
 
 func TestWorkspace_ManifestsPath(t *testing.T) {
-	checker := createMockDirectoryChecker(true)
-	creator := createMockDirectoryCreator(false)
-	testWorkSpace := createMockWorkSpace(checker, creator)
+	checker := CreateMockDirectoryChecker(true)
+	creator := CreateMockDirectoryCreator(false)
+	testWorkSpace := CreateMockWorkSpace(checker, creator)
 
 	assert.Equal(t, "/test/manifests", testWorkSpace.ManifestsPath())
 }
 
 func TestWorkspace_ConfigManifestRepoPath(t *testing.T) {
-	checker := createMockDirectoryChecker(true)
-	creator := createMockDirectoryCreator(false)
-	testWorkSpace := createMockWorkSpace(checker, creator)
+	checker := CreateMockDirectoryChecker(true)
+	creator := CreateMockDirectoryCreator(false)
+	testWorkSpace := CreateMockWorkSpace(checker, creator)
 
 	assert.Equal(t, "/test/manifests/config", testWorkSpace.ConfigManifestRepoPath())
 }
 
 func TestWorkspace_ConfigManifestRepoExists(t *testing.T) {
-	checker := createMockDirectoryChecker(true)
-	creator := createMockDirectoryCreator(false)
-	testWorkSpace := createMockWorkSpace(checker, creator)
+	checker := CreateMockDirectoryChecker(true)
+	creator := CreateMockDirectoryCreator(false)
+	testWorkSpace := CreateMockWorkSpace(checker, creator)
 
 	assert.True(t, testWorkSpace.ConfigManifestRepoExists())
 }
 
 func TestWorkspace_ConfigManifestRepoDoesNotExists(t *testing.T) {
-	checker := createMockDirectoryChecker(false)
-	creator := createMockDirectoryCreator(false)
-	testWorkSpace := createMockWorkSpace(checker, creator)
+	checker := CreateMockDirectoryChecker(false)
+	creator := CreateMockDirectoryCreator(false)
+	testWorkSpace := CreateMockWorkSpace(checker, creator)
 
 	assert.False(t, testWorkSpace.ConfigManifestRepoExists())
 }
 
 func TestWorkspace_DefaultManifestRepoPath(t *testing.T) {
-	checker := createMockDirectoryChecker(true)
-	creator := createMockDirectoryCreator(false)
-	testWorkSpace := createMockWorkSpace(checker, creator)
+	checker := CreateMockDirectoryChecker(true)
+	creator := CreateMockDirectoryCreator(false)
+	testWorkSpace := CreateMockWorkSpace(checker, creator)
 
 	assert.Equal(t, "/test/manifests/default", testWorkSpace.DefaultManifestRepoPath())
 }
 
 func TestWorkspace_DefaultManifestRepoExists(t *testing.T) {
-	checker := createMockDirectoryChecker(true)
-	creator := createMockDirectoryCreator(false)
-	testWorkSpace := createMockWorkSpace(checker, creator)
+	checker := CreateMockDirectoryChecker(true)
+	creator := CreateMockDirectoryCreator(false)
+	testWorkSpace := CreateMockWorkSpace(checker, creator)
 
 	assert.True(t, testWorkSpace.DefaultManifestRepoExists())
 }
 
 func TestWorkspace_DefaultManifestRepoDoesNotExists(t *testing.T) {
-	checker := createMockDirectoryChecker(false)
-	creator := createMockDirectoryCreator(false)
-	testWorkSpace := createMockWorkSpace(checker, creator)
+	checker := CreateMockDirectoryChecker(false)
+	creator := CreateMockDirectoryCreator(false)
+	testWorkSpace := CreateMockWorkSpace(checker, creator)
 
 	assert.False(t, testWorkSpace.DefaultManifestRepoExists())
 }
 
 func TestWorkspace_Setup_Error(t *testing.T) {
-	checker := createMockDirectoryChecker(true)
-	creator := createMockDirectoryCreator(true)
-	testWorkSpace := createMockWorkSpace(checker, creator)
+	checker := CreateMockDirectoryChecker(true)
+	creator := CreateMockDirectoryCreator(true)
+	testWorkSpace := CreateMockWorkSpace(checker, creator)
 
 	testWorkSpace.Setup()
 
@@ -90,9 +90,9 @@ func TestWorkspace_Setup_Error(t *testing.T) {
 }
 
 func TestWorkspace_Setup_NoError(t *testing.T) {
-	checker := createMockDirectoryChecker(true)
-	creator := createMockDirectoryCreator(false)
-	testWorkSpace := createMockWorkSpace(checker, creator)
+	checker := CreateMockDirectoryChecker(true)
+	creator := CreateMockDirectoryCreator(false)
+	testWorkSpace := CreateMockWorkSpace(checker, creator)
 
 	testWorkSpace.Setup()
 

@@ -3,7 +3,6 @@ package manifest
 import (
 	"testing"
 	"github.com/stretchr/testify/assert"
-	"net/url"
 )
 
 const (
@@ -14,9 +13,6 @@ const (
 	invalidJSON = `{blarg`
 	invalidUrl  = `{"project1" : "http]://blarg:foo.[]"}`
 )
-
-var url1, _ = url.Parse("http://www.example1.com")
-var url2, _ = url.Parse("http://www.example2.com")
 
 func TestDefaultDirectory(t *testing.T) {
 	assert.Equal(t, "default", DefaultDirectory)
@@ -45,7 +41,7 @@ func TestFromString_FailsToParseInvalidUrl(t *testing.T) {
 func TestFromString_ParsesJSON(t *testing.T) {
 	parsedManifest, err := FromString(validJSON)
 
-	assert.Equal(t, jsonManifest(), parsedManifest)
+	assert.Equal(t, FullManifest(), parsedManifest)
 	assert.NoError(t, err)
 }
 
@@ -69,14 +65,7 @@ func TestMerge(t *testing.T) {
 }
 
 func TestString(t *testing.T) {
-	jsonString := jsonManifest().String()
+	jsonString := FullManifest().String()
 
 	assert.Equal(t, validJSON, jsonString)
-}
-
-func jsonManifest() Manifest {
-	return Manifest{
-		"project1": *url1,
-		"project2": *url2,
-	}
 }

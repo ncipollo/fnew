@@ -3,21 +3,22 @@ package manifest
 import (
 	"net/url"
 	"encoding/json"
+	"io/ioutil"
 )
 
-const ConfigDirectory  =  "config"
+const ConfigDirectory = "config"
 const DefaultDirectory = "default"
 const DefaultRepository = "https://github.com/ncipollo/fnew-manifest.git"
 
 type Manifest map[string]url.URL
 
-func FromJSON(data []byte) (Manifest, error) {
+func FromJSON(data []byte) (*Manifest, error) {
 	manifest := Manifest{}
 	err := json.Unmarshal(data, &manifest)
-	return manifest, err
+	return &manifest, err
 }
 
-func FromString(jsonString string) (Manifest, error) {
+func FromString(jsonString string) (*Manifest, error) {
 	return FromJSON([]byte(jsonString))
 }
 
@@ -64,4 +65,22 @@ func (manifest Manifest) UnmarshalJSON(data []byte) error {
 	}
 
 	return nil
+}
+
+type Loader interface {
+	Load(filename string) (*Manifest, error)
+}
+
+type FileLoader struct{}
+
+func (FileLoader) Load(filename string) (*Manifest, error) {
+	data, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+	return FromJSON(data)
+}
+
+type Merger interface {
+	MergedManifest() *Manifest
 }

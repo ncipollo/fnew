@@ -4,9 +4,6 @@ import (
 	"net/url"
 	"encoding/json"
 	"io/ioutil"
-	"github.com/ncipollo/fnew/workspace"
-	"github.com/ncipollo/fnew/config"
-	"path"
 )
 
 const FileName = "manifest.json"
@@ -83,52 +80,4 @@ func (FileLoader) Load(filename string) (*Manifest, error) {
 		return nil, err
 	}
 	return FromJSON(data)
-}
-
-type Merger interface {
-	MergedManifest() *Manifest
-}
-
-type WorkspaceManifestMerger struct {
-	configLoader   config.Loader
-	manifestLoader Loader
-	workspace      workspace.Workspace
-}
-
-func (merger WorkspaceManifestMerger) MergedManifest() *Manifest {
-	defaultManifest := merger.defaultRepoManifest()
-	configManifest := merger.configManifest()
-	configRepoManifest := merger.configRepoManifest()
-
-	mergedManifest := defaultManifest.Merge(*configManifest).Merge(*configRepoManifest)
-	return &mergedManifest
-}
-
-func (merger WorkspaceManifestMerger) defaultRepoManifest() *Manifest {
-	dir := merger.workspace.DefaultManifestRepoPath()
-	fileName := path.Join(dir, FileName)
-	manifest, err := merger.manifestLoader.Load(fileName)
-	if err == nil {
-		return &Manifest{}
-	}
-	return manifest
-}
-
-func (merger WorkspaceManifestMerger) configManifest() *Manifest {
-	fileName := merger.workspace.ConfigPath()
-	userConfig, err := merger.configLoader.Load(fileName)
-	if err == nil {
-		return &Manifest{}
-	}
-	return &userConfig.Manifest
-}
-
-func (merger WorkspaceManifestMerger) configRepoManifest() *Manifest {
-	dir := merger.workspace.ConfigManifestRepoPath()
-	fileName := path.Join(dir, FileName)
-	manifest, err := merger.manifestLoader.Load(fileName)
-	if err == nil {
-		return &Manifest{}
-	}
-	return manifest
 }

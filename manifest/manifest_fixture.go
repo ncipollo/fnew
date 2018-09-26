@@ -13,7 +13,7 @@ type MockLoader struct {
 	mock.Mock
 }
 
-func NewMockLoader(shouldError bool) Loader  {
+func NewMockLoader(shouldError bool) *MockLoader  {
 	mockLoader := MockLoader{}
 	if shouldError {
 		mockLoader.On("Load", mock.Anything).Return(nil, errors.New("no manifest for you"))

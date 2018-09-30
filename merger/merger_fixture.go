@@ -9,9 +9,9 @@ type MockMerger struct{
 	mock.Mock
 }
 
-func NewMockMerger() *MockMerger {
+func NewMockMerger(mergedManaifest manifest.Manifest) *MockMerger {
 	mockMerger := MockMerger{}
-	mockMerger.On("MergedManifest").Return(manifest.FullManifest())
+	mockMerger.On("MergedManifest").Return(&mergedManaifest)
 	return &mockMerger
 }
 

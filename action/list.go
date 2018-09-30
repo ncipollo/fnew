@@ -8,7 +8,7 @@ import (
 	"sort"
 )
 
-const projectsHeader  = "Available projects:"
+const projectsHeader = "Available projects:"
 const noProjects = "No projects found"
 
 type ListAction struct {
@@ -30,11 +30,11 @@ func (action ListAction) Perform(output io.Writer) error {
 	return nil
 }
 
-func (action ListAction) printProjects(mergedManifest manifest.Manifest ,output io.Writer) {
+func (action ListAction) printProjects(mergedManifest manifest.Manifest, output io.Writer) {
 	keys := action.sortedManifestProjects(mergedManifest)
 
 	fmt.Fprintln(output, projectsHeader)
-	for key := range keys {
+	for _, key := range keys {
 		fmt.Fprintln(output, key)
 	}
 }

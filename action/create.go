@@ -5,6 +5,8 @@ import (
 	"github.com/ncipollo/fnew/merger"
 	"github.com/ncipollo/fnew/repo"
 	"io"
+	"errors"
+	"net/url"
 )
 
 type CreateAction struct {
@@ -24,6 +26,33 @@ func NewCreateAction(checker workspace.DirectoryChecker,
 }
 
 func (action CreateAction) Perform(output io.Writer) error {
+	err := action.verifyLocalPath()
+	if err != nil {
+		return err
+	}
+
+	projectUrl, err := action.getProjectUrl()
+	if err != nil {
+		return err
+	}
+
+	_, err = action.repo.Clone(action.localPath, projectUrl.String())
+
+	return err
+}
+
+func (action CreateAction) verifyLocalPath() error {
+	if action.checker.DirectoryExists(action.localPath) {
+		return errors.New("project already exists")
+	}
 	return nil
 }
 
+func (action CreateAction) getProjectUrl() (url.URL, error) {
+	mergedManifest := action.merger.MergedManifest()
+	projectUrl := (*mergedManifest)[action.projectName]
+	if len(projectUrl.String()) == 0 {
+		return url.URL{}, errors.New("project not found")
+	}
+	return projectUrl, nil
+}

@@ -7,7 +7,7 @@ import (
 	"testing"
 	"bytes"
 	"fmt"
-	"github.com/magiconair/properties/assert"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestListAction_Perform_EmptyManifest(t *testing.T) {
@@ -17,7 +17,7 @@ func TestListAction_Perform_EmptyManifest(t *testing.T) {
 	action.Perform(output)
 
 	expectedString := fmt.Sprintln(noProjects)
-	assert.Equal(t, output.String(), expectedString)
+	assert.Equal(t, expectedString, output.String())
 }
 
 func TestListAction_Perform_FullManifest(t *testing.T) {
@@ -27,7 +27,7 @@ func TestListAction_Perform_FullManifest(t *testing.T) {
 	action.Perform(output)
 
 	expectedString := fmt.Sprint(projectsHeader, "\n", "a\n", "b\n", "c\n")
-	assert.Equal(t, output.String(), expectedString)
+	assert.Equal(t, expectedString, output.String())
 }
 
 func emptyManifestMerger() merger.Merger {

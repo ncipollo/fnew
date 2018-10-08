@@ -40,7 +40,8 @@ func (repo *MockRepo) AssertCloneNotCalled(t *testing.T, localPath string, repoU
 
 func (repo *MockRepo) StubClone(shouldError bool)  {
 	if shouldError {
-		repo.On("Clone", mock.Anything, mock.Anything).Return(nil, errors.New("you're the clone"))
+		var noRepo *git.Repository = nil
+		repo.On("Clone", mock.Anything, mock.Anything).Return(noRepo, errors.New("you're the clone"))
 	} else {
 		repo.On("Clone", mock.Anything, mock.Anything).Return(&git.Repository{}, nil)
 	}
@@ -48,7 +49,8 @@ func (repo *MockRepo) StubClone(shouldError bool)  {
 
 func (repo *MockRepo) StubOpen(shouldError bool)  {
 	if shouldError {
-		repo.On("Open", mock.Anything).Return(nil, errors.New("closed"))
+		var noRepo *git.Repository = nil
+		repo.On("Open", mock.Anything).Return(noRepo, errors.New("closed"))
 	} else {
 		repo.On("Open", mock.Anything).Return(git.Repository{}, nil)
 	}

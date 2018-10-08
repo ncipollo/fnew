@@ -6,6 +6,8 @@ import (
 	"errors"
 )
 
+const MockProject1 = "project1"
+const MockProject2 = "project2"
 var url1, _ = url.Parse("http://www.example1.com")
 var url2, _ = url.Parse("http://www.example2.com")
 
@@ -31,7 +33,7 @@ func (mockLoader *MockLoader) Load(filename string) (*Manifest, error) {
 
 func FullManifest() *Manifest {
 	return &Manifest{
-		"project1": *url1,
-		"project2": *url2,
+		MockProject1: *url1,
+		MockProject2: *url2,
 	}
 }

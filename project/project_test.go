@@ -52,7 +52,7 @@ func TestFromJSON_AllTransformOptions(t *testing.T) {
 					Old: "old",
 					New: "new",
 				},
-				Type: transform.TransformTypeFileMove,
+				Type: transform.TypeFileMove,
 			},
 		},
 	}
@@ -66,7 +66,7 @@ func TestFromJSON_DefaultTransformOptions(t *testing.T) {
 	expectedProject := &Project{
 		Transforms: []transform.TransformOptions{
 			{
-				Type: transform.TransformTypeFileMove,
+				Type: transform.TypeFileMove,
 			},
 		},
 	}

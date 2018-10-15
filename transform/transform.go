@@ -3,11 +3,11 @@ package transform
 type Type string
 
 const (
-	TransformTypeFileMove              Type = "file_move"
-	TransformTypeFileStringReplace     Type = "file_string_replace"
-	TransformTypeInput                 Type = "input"
-	TransformTypeRunScript             Type = "run_script"
-	TransformTypeVariableStringReplace Type = "variable_string_replace"
+	TypeFileMove              Type = "file_move"
+	TypeFileStringReplace     Type = "file_string_replace"
+	TypeInput                 Type = "input"
+	TypeRunScript             Type = "run_script"
+	TypeVariableStringReplace Type = "variable_string_replace"
 )
 
 type Transform interface {

@@ -41,7 +41,7 @@ func TestFromJSON_AllTransformOptions(t *testing.T) {
 	parsedProject, err := FromString(allTransformOptions)
 
 	expectedProject := &Project{
-		Transforms: []transform.TransformOptions{
+		Transforms: []transform.Options{
 			{
 				Arguments:      []string{"foo", "bar"},
 				InputPath:      "input/path",
@@ -64,7 +64,7 @@ func TestFromJSON_DefaultTransformOptions(t *testing.T) {
 	parsedProject, err := FromString(defaultTransformOptions)
 
 	expectedProject := &Project{
-		Transforms: []transform.TransformOptions{
+		Transforms: []transform.Options{
 			{
 				Type: transform.TypeFileMove,
 			},
@@ -85,7 +85,7 @@ func TestFromJSON_EmptyProject(t *testing.T) {
 func TestFromJSON_EmptyTransforms(t *testing.T) {
 	parsedProject, err := FromString(emptyTransforms)
 
-	expectedProject := &Project{Transforms: []transform.TransformOptions{}}
+	expectedProject := &Project{Transforms: []transform.Options{}}
 	assert.Equal(t, expectedProject, parsedProject)
 	assert.NoError(t, err)
 }

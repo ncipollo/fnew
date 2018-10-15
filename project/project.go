@@ -7,7 +7,7 @@ import (
 )
 
 type Project struct {
-	Transforms []transform.TransformOptions `json:"transforms,omitempty"`
+	Transforms []transform.Options `json:"transforms,omitempty"`
 }
 
 func FromFile(filename string) (*Project, error) {

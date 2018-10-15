@@ -14,7 +14,7 @@ type Transform interface {
 	Apply()
 }
 
-type TransformOptions struct {
+type Options struct {
 	Arguments []string `json:"arguments,omitempty"`
 	InputPath string `json:"input_path,omitempty"`
 	InputVariable string `json:"input_variable,omitempty"`

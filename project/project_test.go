@@ -15,6 +15,7 @@ const (
 			"input_variable" : "$inputVariable",
 			"output_path" : "output/path",
 			"output_variable" : "$outputVariable",
+			"skip_if_variable_exists" : true,
 			"string_replace" : {
 				"old" : "old",
 				"new" : "new"
@@ -43,11 +44,12 @@ func TestFromJSON_AllTransformOptions(t *testing.T) {
 	expectedProject := &Project{
 		Transforms: []transform.Options{
 			{
-				Arguments:      []string{"foo", "bar"},
-				InputPath:      "input/path",
-				InputVariable:  "$inputVariable",
-				OutputPath:     "output/path",
-				OutputVariable: "$outputVariable",
+				Arguments:            []string{"foo", "bar"},
+				InputPath:            "input/path",
+				InputVariable:        "$inputVariable",
+				OutputPath:           "output/path",
+				OutputVariable:       "$outputVariable",
+				SkipIfVariableExists: true,
 				StringReplace: transform.StringReplace{
 					Old: "old",
 					New: "new",

@@ -1,65 +1,65 @@
 package action
 
 import (
-	"testing"
-	"github.com/ncipollo/fnew/config"
-	"github.com/ncipollo/fnew/repo"
-	"os"
-	"github.com/ncipollo/fnew/workspace"
-	"github.com/ncipollo/fnew/manifest"
-	"github.com/stretchr/testify/mock"
+    "github.com/ncipollo/fnew/config"
+    "github.com/ncipollo/fnew/manifest"
+    "github.com/ncipollo/fnew/repo"
+    "github.com/ncipollo/fnew/workspace"
+    "github.com/stretchr/testify/mock"
+    "os"
+    "testing"
 )
 
 func TestSetupAction_Perform_ReposDoNotExist(t *testing.T) {
-	configLoader := config.MockLoaderWithRepoUrl()
-	mockRepo := mockRepo()
-	mockWorkSpace := workspaceWithoutRepos()
+    configLoader := config.MockLoaderWithRepoUrl()
+    mockRepo := mockRepo()
+    mockWorkSpace := workspaceWithoutRepos()
 
-	setupAction := NewSetupAction(configLoader, mockRepo, mockWorkSpace)
-	setupAction.Perform(os.Stdout)
+    setupAction := NewSetupAction(configLoader, mockRepo, mockWorkSpace)
+    setupAction.Perform(os.Stdout)
 
-	mockRepo.AssertCloneCalled(t, mockWorkSpace.DefaultManifestRepoPath(), manifest.DefaultRepository)
-	mockRepo.AssertCloneCalled(t, mockWorkSpace.ConfigManifestRepoPath(), config.FullConfig().ManifestRepoUrl.String())
+    mockRepo.AssertCloneCalled(t, mockWorkSpace.DefaultManifestRepoPath(), manifest.DefaultRepository)
+    mockRepo.AssertCloneCalled(t, mockWorkSpace.ConfigManifestRepoPath(), config.FullConfig().ManifestRepoUrl.String())
 }
 
 func TestSetupAction_Perform_ReposDoNotExist_NoConfigRepoUrl(t *testing.T) {
-	configLoader := config.MockLoaderWithoutRepoUrl()
-	mockRepo := mockRepo()
-	mockWorkSpace := workspaceWithoutRepos()
+    configLoader := config.MockLoaderWithoutRepoUrl()
+    mockRepo := mockRepo()
+    mockWorkSpace := workspaceWithoutRepos()
 
-	setupAction := NewSetupAction(configLoader, mockRepo, mockWorkSpace)
-	setupAction.Perform(os.Stdout)
+    setupAction := NewSetupAction(configLoader, mockRepo, mockWorkSpace)
+    setupAction.Perform(os.Stdout)
 
-	mockRepo.AssertCloneCalled(t, mockWorkSpace.DefaultManifestRepoPath(), manifest.DefaultRepository)
-	mockRepo.AssertCloneNotCalled(t, mockWorkSpace.ConfigManifestRepoPath(), mock.Anything)
+    mockRepo.AssertCloneCalled(t, mockWorkSpace.DefaultManifestRepoPath(), manifest.DefaultRepository)
+    mockRepo.AssertCloneNotCalled(t, mockWorkSpace.ConfigManifestRepoPath(), mock.Anything)
 }
 
 func TestSetupAction_Perform_ReposExist(t *testing.T) {
-	configLoader := config.MockLoaderWithRepoUrl()
-	mockRepo := mockRepo()
-	mockWorkSpace := workspaceWithRepos()
+    configLoader := config.MockLoaderWithRepoUrl()
+    mockRepo := mockRepo()
+    mockWorkSpace := workspaceWithRepos()
 
-	setupAction := NewSetupAction(configLoader, mockRepo, mockWorkSpace)
-	setupAction.Perform(os.Stdout)
+    setupAction := NewSetupAction(configLoader, mockRepo, mockWorkSpace)
+    setupAction.Perform(os.Stdout)
 
-	mockRepo.AssertCloneNotCalled(t, mockWorkSpace.DefaultManifestRepoPath(), manifest.DefaultRepository)
-	mockRepo.AssertCloneNotCalled(t, mockWorkSpace.ConfigManifestRepoPath(), config.FullConfig().ManifestRepoUrl.String())
+    mockRepo.AssertCloneNotCalled(t, mockWorkSpace.DefaultManifestRepoPath(), manifest.DefaultRepository)
+    mockRepo.AssertCloneNotCalled(t, mockWorkSpace.ConfigManifestRepoPath(), config.FullConfig().ManifestRepoUrl.String())
 }
 
 func mockRepo() *repo.MockRepo {
-	mockRepo := repo.NewMockRepo()
-	mockRepo.StubClone(false)
-	return mockRepo
+    mockRepo := repo.NewMockRepo()
+    mockRepo.StubClone(false)
+    return mockRepo
 }
 
 func workspaceWithRepos() workspace.Workspace {
-	checker := workspace.CreateMockDirectoryChecker(true)
-	creator := workspace.CreateMockDirectoryCreator(false)
-	return workspace.CreateMockWorkSpace(checker, creator)
+    checker := workspace.CreateMockDirectoryChecker(true)
+    creator := workspace.CreateMockDirectoryCreator(false)
+    return workspace.CreateMockWorkSpace(checker, creator)
 }
 
 func workspaceWithoutRepos() workspace.Workspace {
-	checker := workspace.CreateMockDirectoryChecker(false)
-	creator := workspace.CreateMockDirectoryCreator(false)
-	return workspace.CreateMockWorkSpace(checker, creator)
+    checker := workspace.CreateMockDirectoryChecker(false)
+    creator := workspace.CreateMockDirectoryCreator(false)
+    return workspace.CreateMockWorkSpace(checker, creator)
 }

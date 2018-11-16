@@ -1,13 +1,13 @@
 package project
 
 import (
-	"testing"
-	"github.com/stretchr/testify/assert"
-	"github.com/ncipollo/fnew/transform"
+    "github.com/ncipollo/fnew/transform"
+    "github.com/stretchr/testify/assert"
+    "testing"
 )
 
 const (
-	allTransformOptions = `{
+    allTransformOptions = `{
 	"transforms": [
 		{
 			"arguments" : ["foo","bar"],
@@ -24,77 +24,77 @@ const (
 		}
 	] 
 }`
-	defaultTransformOptions = `{
+    defaultTransformOptions = `{
 	"transforms": [
 		{
 			"type": "file_move"
 		}
 	] 
 }`
-	emptyProject    = `{}`
-	emptyTransforms = `{
+    emptyProject    = `{}`
+    emptyTransforms = `{
 	"transforms": [] 
 }`
-	invalidJSON = `{blarg`
+    invalidJSON = `{blarg`
 )
 
 func TestFromJSON_AllTransformOptions(t *testing.T) {
-	parsedProject, err := FromString(allTransformOptions)
+    parsedProject, err := FromString(allTransformOptions)
 
-	expectedProject := &Project{
-		Transforms: []transform.Options{
-			{
-				Arguments:            []string{"foo", "bar"},
-				InputPath:            "input/path",
-				InputVariable:        "$inputVariable",
-				OutputPath:           "output/path",
-				OutputVariable:       "$outputVariable",
-				SkipIfVariableExists: true,
-				StringReplace: transform.StringReplace{
-					Old: "old",
-					New: "new",
-				},
-				Type: transform.TypeFileMove,
-			},
-		},
-	}
-	assert.Equal(t, expectedProject, parsedProject)
-	assert.NoError(t, err)
+    expectedProject := &Project{
+        Transforms: []transform.Options{
+            {
+                Arguments:            []string{"foo", "bar"},
+                InputPath:            "input/path",
+                InputVariable:        "$inputVariable",
+                OutputPath:           "output/path",
+                OutputVariable:       "$outputVariable",
+                SkipIfVariableExists: true,
+                StringReplace: transform.StringReplace{
+                    Old: "old",
+                    New: "new",
+                },
+                Type: transform.TypeFileMove,
+            },
+        },
+    }
+    assert.Equal(t, expectedProject, parsedProject)
+    assert.NoError(t, err)
 }
 
 func TestFromJSON_DefaultTransformOptions(t *testing.T) {
-	parsedProject, err := FromString(defaultTransformOptions)
+    parsedProject, err := FromString(defaultTransformOptions)
 
-	expectedProject := &Project{
-		Transforms: []transform.Options{
-			{
-				Type: transform.TypeFileMove,
-			},
-		},
-	}
-	assert.Equal(t, expectedProject, parsedProject)
-	assert.NoError(t, err)
+    expectedProject := &Project{
+        Transforms: []transform.Options{
+            {
+                Type: transform.TypeFileMove,
+            },
+        },
+    }
+    assert.Equal(t, expectedProject, parsedProject)
+    assert.NoError(t, err)
 }
 
 func TestFromJSON_EmptyProject(t *testing.T) {
-	parsedProject, err := FromString(emptyProject)
+    parsedProject, err := FromString(emptyProject)
 
-	expectedProject := &Project{Transforms: nil}
-	assert.Equal(t, expectedProject, parsedProject)
-	assert.NoError(t, err)
+    expectedProject := &Project{Transforms: nil}
+    assert.Equal(t, expectedProject, parsedProject)
+    assert.NoError(t, err)
 }
 
 func TestFromJSON_EmptyTransforms(t *testing.T) {
-	parsedProject, err := FromString(emptyTransforms)
+    parsedProject, err := FromString(emptyTransforms)
 
-	expectedProject := &Project{Transforms: []transform.Options{}}
-	assert.Equal(t, expectedProject, parsedProject)
-	assert.NoError(t, err)
+    expectedProject := &Project{Transforms: []transform.Options{}}
+    assert.Equal(t, expectedProject, parsedProject)
+    assert.NoError(t, err)
 }
 
 func TestFromJSON_InvalidJson(t *testing.T) {
-	parsedProject, err := FromString(invalidJSON)
+    parsedProject, err := FromString(invalidJSON)
 
-	assert.Nil(t, parsedProject)
-	assert.Error(t, err)
+    assert.Nil(t, parsedProject)
+    assert.Error(t, err)
 }

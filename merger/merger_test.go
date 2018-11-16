@@ -1,15 +1,15 @@
 package merger
 
 import (
-	"testing"
-	"github.com/ncipollo/fnew/config"
-	"github.com/ncipollo/fnew/workspace"
-	"path"
-	"github.com/ncipollo/fnew/manifest"
-	"net/url"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-	"errors"
+    "errors"
+    "github.com/ncipollo/fnew/config"
+    "github.com/ncipollo/fnew/manifest"
+    "github.com/ncipollo/fnew/workspace"
+    "github.com/stretchr/testify/assert"
+    "github.com/stretchr/testify/mock"
+    "net/url"
+    "path"
+    "testing"
 )
 
 const configProject = "config"
@@ -19,64 +19,64 @@ var configUrl, _ = url.Parse("http://www.example/config.com")
 var defaultUrl, _ = url.Parse("http://www.example/default.com")
 
 func TestWorkspaceManifestMerger_ErrorLoadingManifestsReturnEmptyManifest(t *testing.T) {
-	configLoader := config.MockLoaderWithoutRepoUrl()
-	currentWorkspace := workspace.CreateMockWorkSpace(workspace.CreateMockDirectoryChecker(true),
-		workspace.CreateMockDirectoryCreator(false))
-	manifestLoader := mockLoaderWithErrors()
-	merger := NewWorkspaceManifestMerger(configLoader, manifestLoader, currentWorkspace)
+    configLoader := config.MockLoaderWithoutRepoUrl()
+    currentWorkspace := workspace.CreateMockWorkSpace(workspace.CreateMockDirectoryChecker(true),
+        workspace.CreateMockDirectoryCreator(false))
+    manifestLoader := mockLoaderWithErrors()
+    merger := NewWorkspaceManifestMerger(configLoader, manifestLoader, currentWorkspace)
 
-	mergedManifest := merger.MergedManifest()
+    mergedManifest := merger.MergedManifest()
 
-	expectedManifest := &manifest.Manifest{}
+    expectedManifest := &manifest.Manifest{}
 
-	assert.Equal(t, expectedManifest, mergedManifest)
+    assert.Equal(t, expectedManifest, mergedManifest)
 }
 
 func TestWorkspaceManifestMerger_MergedManifest(t *testing.T) {
-	configLoader := config.MockLoaderWithoutRepoUrl()
-	currentWorkspace := workspace.CreateMockWorkSpace(workspace.CreateMockDirectoryChecker(true),
-		workspace.CreateMockDirectoryCreator(false))
-	manifestLoader := mockLoaderWithBothManifests(&currentWorkspace)
-	merger := NewWorkspaceManifestMerger(configLoader, manifestLoader, currentWorkspace)
+    configLoader := config.MockLoaderWithoutRepoUrl()
+    currentWorkspace := workspace.CreateMockWorkSpace(workspace.CreateMockDirectoryChecker(true),
+        workspace.CreateMockDirectoryCreator(false))
+    manifestLoader := mockLoaderWithBothManifests(&currentWorkspace)
+    merger := NewWorkspaceManifestMerger(configLoader, manifestLoader, currentWorkspace)
 
-	mergedManifest := merger.MergedManifest()
+    mergedManifest := merger.MergedManifest()
 
-	expectedManifest := &manifest.Manifest{
-		configProject:  *configUrl,
-		defaultProject: *defaultUrl,
-	}
+    expectedManifest := &manifest.Manifest{
+        configProject:  *configUrl,
+        defaultProject: *defaultUrl,
+    }
 
-	assert.Equal(t, expectedManifest, mergedManifest)
+    assert.Equal(t, expectedManifest, mergedManifest)
 }
 
 func mockLoaderWithBothManifests(currentWorkspace *workspace.Workspace) manifest.Loader {
-	mockLoader := manifest.MockLoader{}
+    mockLoader := manifest.MockLoader{}
 
-	mockLoader.On("Load", configManifestPath(currentWorkspace)).Return(mockConfigManifest(), nil)
-	mockLoader.On("Load", defaultManifestPath(currentWorkspace)).Return(mockDefaultManifest(), nil)
+    mockLoader.On("Load", configManifestPath(currentWorkspace)).Return(mockConfigManifest(), nil)
+    mockLoader.On("Load", defaultManifestPath(currentWorkspace)).Return(mockDefaultManifest(), nil)
 
-	return &mockLoader
+    return &mockLoader
 }
 
 func mockLoaderWithErrors() manifest.Loader {
-	var noManifest *manifest.Manifest = nil
-	mockLoader := manifest.MockLoader{}
-	mockLoader.On("Load", mock.Anything).Return(noManifest, errors.New("whomp whomp"))
-	return &mockLoader
+    var noManifest *manifest.Manifest = nil
+    mockLoader := manifest.MockLoader{}
+    mockLoader.On("Load", mock.Anything).Return(noManifest, errors.New("whomp whomp"))
+    return &mockLoader
 }
 
 func configManifestPath(currentWorkspace *workspace.Workspace) string {
-	return path.Join(currentWorkspace.ConfigManifestRepoPath(), manifest.FileName)
+    return path.Join(currentWorkspace.ConfigManifestRepoPath(), manifest.FileName)
 }
 
 func defaultManifestPath(currentWorkspace *workspace.Workspace) string {
-	return path.Join(currentWorkspace.DefaultManifestRepoPath(), manifest.FileName)
+    return path.Join(currentWorkspace.DefaultManifestRepoPath(), manifest.FileName)
 }
 
 func mockConfigManifest() *manifest.Manifest {
-	return &manifest.Manifest{configProject: *configUrl}
+    return &manifest.Manifest{configProject: *configUrl}
 }
 
 func mockDefaultManifest() *manifest.Manifest {
-	return &manifest.Manifest{defaultProject: *defaultUrl}
+    return &manifest.Manifest{defaultProject: *defaultUrl}
 }

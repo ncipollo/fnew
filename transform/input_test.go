@@ -2,7 +2,6 @@ package transform
 
 import (
     "bytes"
-    "fmt"
     "github.com/stretchr/testify/assert"
     "testing"
 )
@@ -17,7 +16,7 @@ func TestInputTransform_Apply_DoesNotSkipIfVariableDoesNotExist(t *testing.T) {
     simulateUserInput("input", input)
     inputTransform.Apply(variables)
 
-    assertInputTransformMessage(t, inputTransform.requestInputMessage(inputTransformVariableName), output)
+    assertTransformMessage(t, inputTransform.requestInputMessage(inputTransformVariableName), output)
 }
 
 func TestInputTransform_Apply_ErrorsIfNoVariable(t *testing.T) {
@@ -36,7 +35,7 @@ func TestInputTransform_Apply_SkipsTransformWhenVariableExists(t *testing.T) {
     variables[inputTransformVariableName] = existingVariable
     inputTransform.Apply(variables)
 
-    assertInputTransformMessage(t, inputTransform.skipInputMessage(inputTransformVariableName), output)
+    assertTransformMessage(t, inputTransform.skipInputMessage(inputTransformVariableName), output)
     assert.Equal(t, existingVariable, variables[inputTransformVariableName])
 }
 
@@ -50,13 +49,8 @@ func TestInputTransform_Apply_UserProvidesVariable(t *testing.T) {
     simulateUserInput(userInput, input)
     inputTransform.Apply(variables)
 
-    assertInputTransformMessage(t, inputTransform.requestInputMessage(inputTransformVariableName), output)
+    assertTransformMessage(t, inputTransform.requestInputMessage(inputTransformVariableName), output)
     assert.Equal(t, userInput, variables[inputTransformVariableName])
-}
-
-func assertInputTransformMessage(t *testing.T, expectedMessage string, outputBuffer *bytes.Buffer) {
-    outputMessage, _ := outputBuffer.ReadString('\n')
-    assert.Equal(t, fmt.Sprintln(expectedMessage), outputMessage)
 }
 
 func createInputTransformTestObjects(options Options) (*bytes.Buffer, *bytes.Buffer, *InputTransform) {

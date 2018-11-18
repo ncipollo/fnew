@@ -1,5 +1,7 @@
 package transform
 
+import "strings"
+
 type Type string
 
 const (
@@ -28,6 +30,10 @@ type Options struct {
 type StringReplace struct {
     Old string `json:"old"`
     New string `json:"new"`
+}
+
+func (stringReplace *StringReplace) Replace(input string) string {
+    return strings.Replace(input, stringReplace.Old, stringReplace.New, -1)
 }
 
 type Variables map[string]string

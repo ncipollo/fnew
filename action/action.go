@@ -1,9 +1,9 @@
 package action
 
 import (
-	"io"
+    "io"
 )
 
 type Action interface {
-	Perform(output io.Writer) error
+    Perform(output io.Writer) error
 }

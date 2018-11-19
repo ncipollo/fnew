@@ -3,6 +3,7 @@ package main
 import (
     "fmt"
     "github.com/ncipollo/fnew/manifest"
+    "github.com/ncipollo/fnew/message"
     "github.com/ncipollo/fnew/repo"
     "github.com/ncipollo/fnew/transform"
     "github.com/ncipollo/fnew/workspace"
@@ -19,6 +20,6 @@ func main() {
 
     options := transform.Options{OutputVariable: "$TEST"}
     variables := transform.NewVariables()
-    inputTransform := transform.NewInputTransform(options, os.Stdin, os.Stdout)
+    inputTransform := transform.NewInputTransform(options, os.Stdin, message.NewStandardWriter())
     inputTransform.Apply(variables)
 }

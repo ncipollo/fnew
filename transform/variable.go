@@ -2,15 +2,15 @@ package transform
 
 import (
     "fmt"
-    "io"
+    "github.com/ncipollo/fnew/message"
 )
 
 type VariableTransform struct {
     Options
-    output io.Writer
+    output message.Printer
 }
 
-func NewVariableTransform(options Options, output io.Writer) *VariableTransform {
+func NewVariableTransform(options Options, output message.Printer) *VariableTransform {
     return &VariableTransform{Options: options, output: output}
 }
 
@@ -23,13 +23,13 @@ func (transform *VariableTransform) Apply(variables Variables) error {
     stringReplace := transform.Options.StringReplace
     skip := len(output) != 0 && skipIfOutputExists
 
-    fmt.Fprintln(transform.output, transform.transformMessage())
+    transform.output.Println(transform.transformMessage())
     if skip {
-        fmt.Fprintln(transform.output, transform.skipMessage())
+        transform.output.Println(transform.skipMessage())
         return nil
     }
 
-    variables[outputKey] = stringReplace.Replace(input)
+    variables[outputKey] = stringReplace.Replace(input, variables)
 
     return nil
 }

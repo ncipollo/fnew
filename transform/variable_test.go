@@ -1,7 +1,7 @@
 package transform
 
 import (
-    "bytes"
+    "github.com/ncipollo/fnew/message"
     "github.com/stretchr/testify/assert"
     "testing"
 )
@@ -20,7 +20,7 @@ func TestVariableTransform_Apply_DoesNotSkipIfVariableDoesNotExist(t *testing.T)
     transform.Apply(variables)
 
     assert.Equal(t, newString, variables[variableTransformOutputName])
-    assertTransformMessage(t, transform.transformMessage(), output)
+    output.AssertMessage(t, transform.transformMessage())
 }
 
 func TestVariableTransform_Apply_SkipsTransformWhenVariableExists(t *testing.T) {
@@ -35,8 +35,8 @@ func TestVariableTransform_Apply_SkipsTransformWhenVariableExists(t *testing.T) 
     transform.Apply(variables)
 
     assert.Equal(t, oldString, variables[variableTransformOutputName])
-    assertTransformMessage(t, transform.transformMessage(), output)
-    assertTransformMessage(t, transform.skipMessage(), output)
+    output.AssertMessage(t, transform.transformMessage())
+    output.AssertMessage(t, transform.skipMessage())
 }
 
 func TestVariableTransform_Apply_TransformsVariable(t *testing.T) {
@@ -51,7 +51,7 @@ func TestVariableTransform_Apply_TransformsVariable(t *testing.T) {
     transform.Apply(variables)
 
     assert.Equal(t, newString, variables[variableTransformOutputName])
-    assertTransformMessage(t, transform.transformMessage(), output)
+    output.AssertMessage(t, transform.transformMessage())
 }
 
 func createVariableTransformOptions(replace StringReplace, skipIfExists bool) *Options {
@@ -63,8 +63,8 @@ func createVariableTransformOptions(replace StringReplace, skipIfExists bool) *O
     }
 }
 
-func createVariableTransformTestObjects(options Options) (*bytes.Buffer, *VariableTransform) {
-    output := new(bytes.Buffer)
+func createVariableTransformTestObjects(options Options) (*message.TestPrinter, *VariableTransform) {
+    output := message.NewTestPrinter()
     transform := NewVariableTransform(options, output)
     return output, transform
 }

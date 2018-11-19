@@ -32,8 +32,27 @@ type StringReplace struct {
     New string `json:"new"`
 }
 
-func (stringReplace *StringReplace) Replace(input string) string {
-    return strings.Replace(input, stringReplace.Old, stringReplace.New, -1)
+func (stringReplace *StringReplace) Replace(input string, variables Variables) string {
+    return strings.Replace(input,
+        stringReplace.oldString(variables),
+        stringReplace.newString(variables),
+        -1)
+}
+
+func (stringReplace *StringReplace) oldString(variables Variables) string {
+    if strings.HasPrefix(stringReplace.Old, "$") {
+        return variables[strings.TrimPrefix(stringReplace.Old, "$")]
+    } else {
+        return stringReplace.Old
+    }
+}
+
+func (stringReplace *StringReplace) newString(variables Variables) string {
+    if strings.HasPrefix(stringReplace.New, "$") {
+        return variables[strings.TrimPrefix(stringReplace.New, "$")]
+    } else {
+        return stringReplace.New
+    }
 }
 
 type Variables map[string]string

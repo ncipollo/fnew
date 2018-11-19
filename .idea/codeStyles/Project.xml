@@ -220,5 +220,10 @@
         </rules>
       </arrangement>
     </codeStyleSettings>
+    <codeStyleSettings language="go">
+      <indentOptions>
+        <option name="USE_TAB_CHARACTER" value="false" />
+      </indentOptions>
+    </codeStyleSettings>
   </code_scheme>
 </component>

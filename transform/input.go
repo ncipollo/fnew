@@ -4,6 +4,7 @@ import (
     "bufio"
     "errors"
     "fmt"
+    "github.com/ncipollo/fnew/message"
     "io"
     "strings"
 )
@@ -11,10 +12,10 @@ import (
 type InputTransform struct {
     Options
     input  io.Reader
-    output io.Writer
+    output message.Printer
 }
 
-func NewInputTransform(options Options, input io.Reader, output io.Writer) *InputTransform {
+func NewInputTransform(options Options, input io.Reader, output message.Printer) *InputTransform {
     return &InputTransform{Options: options, input: input, output: output}
 }
 
@@ -27,14 +28,14 @@ func (transform *InputTransform) Apply(variables Variables) error {
 
     if transform.SkipIfVariableExists {
         if len(variableValue) > 0 {
-            message := transform.skipInputMessage(variableName)
-            fmt.Fprintln(transform.output, message)
+            msg := transform.skipInputMessage(variableName)
+            transform.output.Println(msg)
             return nil
         }
     }
 
-    message := transform.requestInputMessage(variableName)
-    fmt.Fprintln(transform.output, message)
+    msg := transform.requestInputMessage(variableName)
+    transform.output.Println(msg)
 
     value, err := transform.readVariable()
     if err == nil {

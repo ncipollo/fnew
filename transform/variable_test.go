@@ -15,7 +15,7 @@ func TestVariableTransform_Apply_DoesNotSkipIfVariableDoesNotExist(t *testing.T)
     variables := NewVariables()
     variables[variableTransformInputName] = oldString
     options := createVariableTransformOptions(StringReplace{Old: oldString, New: newString}, true)
-    output, transform := createVariableTransformTestObjects(*options)
+    transform, output := createVariableTransformTestObjects(*options)
 
     transform.Apply(variables)
 
@@ -30,7 +30,7 @@ func TestVariableTransform_Apply_SkipsTransformWhenVariableExists(t *testing.T) 
     variables[variableTransformInputName] = oldString
     variables[variableTransformOutputName] = oldString
     options := createVariableTransformOptions(StringReplace{Old: oldString, New: newString}, true)
-    output, transform := createVariableTransformTestObjects(*options)
+    transform, output := createVariableTransformTestObjects(*options)
 
     transform.Apply(variables)
 
@@ -46,7 +46,7 @@ func TestVariableTransform_Apply_TransformsVariable(t *testing.T) {
     variables[variableTransformInputName] = oldString
     variables[variableTransformOutputName] = oldString
     options := createVariableTransformOptions(StringReplace{Old: oldString, New: newString}, false)
-    output, transform := createVariableTransformTestObjects(*options)
+    transform, output := createVariableTransformTestObjects(*options)
 
     transform.Apply(variables)
 
@@ -63,8 +63,8 @@ func createVariableTransformOptions(replace StringReplace, skipIfExists bool) *O
     }
 }
 
-func createVariableTransformTestObjects(options Options) (*message.TestPrinter, *VariableTransform) {
+func createVariableTransformTestObjects(options Options) (*VariableTransform, *message.TestPrinter) {
     output := message.NewTestPrinter()
     transform := NewVariableTransform(options, output)
-    return output, transform
+    return transform, output
 }

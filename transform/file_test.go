@@ -13,7 +13,7 @@ const fileTransformInputPath = "input*"
 func TestFileTransform_Apply_GlobErrorFailTransform(t *testing.T) {
     variables := NewVariables()
     paths := []string{"input1", "input2", "input2"}
-    output, transform := createFileTransformTestObjects(paths, errors.New("glob"), nil)
+    transform, output := createFileTransformTestObjects(paths, errors.New("glob"), nil)
 
     err := transform.Apply(variables)
     output.AssertMessage(t, transform.transformMessage())
@@ -23,7 +23,7 @@ func TestFileTransform_Apply_GlobErrorFailTransform(t *testing.T) {
 func TestFileTransform_Apply_ReplacerErrorFailTransform(t *testing.T) {
     variables := NewVariables()
     paths := []string{"input1", "input2", "input2"}
-    output, transform := createFileTransformTestObjects(paths, nil, errors.New("replacer"))
+    transform, output := createFileTransformTestObjects(paths, nil, errors.New("replacer"))
 
     err := transform.Apply(variables)
     output.AssertMessage(t, transform.transformMessage())
@@ -33,7 +33,7 @@ func TestFileTransform_Apply_ReplacerErrorFailTransform(t *testing.T) {
 func TestFileTransform_Apply_Success(t *testing.T) {
     variables := NewVariables()
     paths := []string{"input1", "input2", "input2"}
-    output, transform := createFileTransformTestObjects(paths, nil, nil)
+    transform, output := createFileTransformTestObjects(paths, nil, nil)
 
     err := transform.Apply(variables)
     output.AssertMessage(t, transform.transformMessage())
@@ -49,13 +49,13 @@ func createFileTransformOptions() *Options {
 
 func createFileTransformTestObjects(globberPaths []string,
     globberErr error,
-    replacerErr error) (*message.TestPrinter, *FileTransform) {
+    replacerErr error) (*FileTransform, *message.TestPrinter) {
     options := createFileTransformOptions()
     output := message.NewTestPrinter()
     globber := NewMockGlobber(globberPaths, globberErr)
     replacer := NewMockFileStringReplacer(replacerErr)
     transform := NewFileTransform(*options, output, globber, replacer)
-    return output, transform
+    return transform, output
 }
 
 type MockFileStringReplacer struct {

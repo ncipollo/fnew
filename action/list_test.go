@@ -1,33 +1,32 @@
 package action
 
 import (
-    "bytes"
-    "fmt"
     "github.com/ncipollo/fnew/manifest"
     "github.com/ncipollo/fnew/merger"
-    "github.com/stretchr/testify/assert"
     "net/url"
     "testing"
+    "github.com/ncipollo/fnew/message"
 )
 
 func TestListAction_Perform_EmptyManifest(t *testing.T) {
     action := NewListAction(emptyManifestMerger())
-    output := new(bytes.Buffer)
+    output := message.NewTestPrinter()
 
     action.Perform(output)
 
-    expectedString := fmt.Sprintln(noProjects)
-    assert.Equal(t, expectedString, output.String())
+    output.AssertMessage(t, noProjects)
 }
 
 func TestListAction_Perform_FullManifest(t *testing.T) {
     action := NewListAction(fullManifestMerger())
-    output := new(bytes.Buffer)
+    output := message.NewTestPrinter()
 
     action.Perform(output)
 
-    expectedString := fmt.Sprint(projectsHeader, "\n", "a\n", "b\n", "c\n")
-    assert.Equal(t, expectedString, output.String())
+    output.AssertMessage(t, projectsHeader)
+    output.AssertMessage(t, "a")
+    output.AssertMessage(t, "b")
+    output.AssertMessage(t, "c")
 }
 
 func emptyManifestMerger() merger.Merger {

@@ -5,7 +5,7 @@ import (
     "github.com/ncipollo/fnew/manifest"
     "github.com/ncipollo/fnew/repo"
     "github.com/ncipollo/fnew/workspace"
-    "io"
+    "github.com/ncipollo/fnew/message"
 )
 
 type SetupAction struct {
@@ -20,7 +20,7 @@ func NewSetupAction(configLoader config.Loader,
     return &SetupAction{configLoader: configLoader, repo: repo, workspace: workspace}
 }
 
-func (action *SetupAction) Perform(output io.Writer) error {
+func (action *SetupAction) Perform(output message.Printer) error {
     err := action.workspace.Setup()
     if err != nil {
         return err

@@ -1,9 +1,9 @@
 package action
 
 import (
-    "io"
+    "github.com/ncipollo/fnew/message"
 )
 
 type Action interface {
-    Perform(output io.Writer) error
+    Perform(output message.Printer) error
 }

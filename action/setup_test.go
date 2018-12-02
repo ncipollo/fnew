@@ -6,8 +6,8 @@ import (
     "github.com/ncipollo/fnew/repo"
     "github.com/ncipollo/fnew/workspace"
     "github.com/stretchr/testify/mock"
-    "os"
     "testing"
+    "github.com/ncipollo/fnew/message"
 )
 
 func TestSetupAction_Perform_ReposDoNotExist(t *testing.T) {
@@ -16,7 +16,7 @@ func TestSetupAction_Perform_ReposDoNotExist(t *testing.T) {
     mockWorkSpace := workspaceWithoutRepos()
 
     setupAction := NewSetupAction(configLoader, mockRepo, mockWorkSpace)
-    setupAction.Perform(os.Stdout)
+    setupAction.Perform(message.NewTestPrinter())
 
     mockRepo.AssertCloneCalled(t, mockWorkSpace.DefaultManifestRepoPath(), manifest.DefaultRepository)
     mockRepo.AssertCloneCalled(t, mockWorkSpace.ConfigManifestRepoPath(), config.FullConfig().ManifestRepoUrl.String())
@@ -28,7 +28,7 @@ func TestSetupAction_Perform_ReposDoNotExist_NoConfigRepoUrl(t *testing.T) {
     mockWorkSpace := workspaceWithoutRepos()
 
     setupAction := NewSetupAction(configLoader, mockRepo, mockWorkSpace)
-    setupAction.Perform(os.Stdout)
+    setupAction.Perform(message.NewTestPrinter())
 
     mockRepo.AssertCloneCalled(t, mockWorkSpace.DefaultManifestRepoPath(), manifest.DefaultRepository)
     mockRepo.AssertCloneNotCalled(t, mockWorkSpace.ConfigManifestRepoPath(), mock.Anything)
@@ -40,7 +40,7 @@ func TestSetupAction_Perform_ReposExist(t *testing.T) {
     mockWorkSpace := workspaceWithRepos()
 
     setupAction := NewSetupAction(configLoader, mockRepo, mockWorkSpace)
-    setupAction.Perform(os.Stdout)
+    setupAction.Perform(message.NewTestPrinter())
 
     mockRepo.AssertCloneNotCalled(t, mockWorkSpace.DefaultManifestRepoPath(), manifest.DefaultRepository)
     mockRepo.AssertCloneNotCalled(t, mockWorkSpace.ConfigManifestRepoPath(), config.FullConfig().ManifestRepoUrl.String())

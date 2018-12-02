@@ -4,10 +4,17 @@ import (
     "encoding/json"
     "github.com/ncipollo/fnew/transform"
     "io/ioutil"
+    "path"
 )
+
+const projectFileName = ".fnew"
 
 type Project struct {
     Transforms []transform.Options `json:"transforms,omitempty"`
+}
+
+func PathInRepo(repoPath string) string  {
+    return path.Join(repoPath, projectFileName)
 }
 
 func FromFile(filename string) (*Project, error) {

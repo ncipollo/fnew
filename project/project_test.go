@@ -8,32 +8,32 @@ import (
 
 const (
     allTransformOptions = `{
-	"transforms": [
-		{
-			"arguments" : ["foo","bar"],
-			"input_path" : "input/path",
-			"input_variable" : "$inputVariable",
-			"output_path" : "output/path",
-			"output_variable" : "$outputVariable",
-			"skip_if_variable_exists" : true,
-			"string_replace" : {
-				"old" : "old",
-				"new" : "new"
-			},
-			"type": "file_move"
-		}
-	] 
+    "transforms": [
+        {
+            "arguments" : ["foo","bar"],
+            "input_path" : "input/path",
+            "input_variable" : "$inputVariable",
+            "output_path" : "output/path",
+            "output_variable" : "$outputVariable",
+            "skip_if_variable_exists" : true,
+            "string_replace" : {
+                "old" : "old",
+                "new" : "new"
+            },
+        "type": "file_move"
+        }
+    ] 
 }`
     defaultTransformOptions = `{
-	"transforms": [
-		{
-			"type": "file_move"
-		}
-	] 
+    "transforms": [
+        {
+            "type": "file_move"
+        }
+    ] 
 }`
     emptyProject    = `{}`
     emptyTransforms = `{
-	"transforms": [] 
+    "transforms": [] 
 }`
     invalidJSON = `{blarg`
 )
@@ -97,4 +97,8 @@ func TestFromJSON_InvalidJson(t *testing.T) {
 
     assert.Nil(t, parsedProject)
     assert.Error(t, err)
+}
+
+func TestPathInRepo(t *testing.T) {
+    assert.Equal(t, "repo/.fnew", PathInRepo("repo"))
 }

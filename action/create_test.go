@@ -6,8 +6,8 @@ import (
     "github.com/ncipollo/fnew/repo"
     "github.com/ncipollo/fnew/workspace"
     "github.com/stretchr/testify/assert"
-    "os"
     "testing"
+    "github.com/ncipollo/fnew/message"
 )
 
 const localPath = "/projects"
@@ -23,7 +23,7 @@ func TestCreateAction_Perform_LocalPathAlreadyExists(t *testing.T) {
         manifest.MockProject1,
         actionRepo)
 
-    err := createAction.Perform(os.Stdout)
+    err := createAction.Perform(message.NewTestPrinter())
 
     assert.Error(t, err)
 }
@@ -37,7 +37,7 @@ func TestCreateAction_Perform_NoProjectFounds(t *testing.T) {
         "invalidProject",
         actionRepo)
 
-    err := createAction.Perform(os.Stdout)
+    err := createAction.Perform(message.NewTestPrinter())
 
     assert.Error(t, err)
 }
@@ -51,7 +51,7 @@ func TestCreateAction_Perform_RepoCloneFails(t *testing.T) {
         manifest.MockProject1,
         actionRepo)
 
-    err := createAction.Perform(os.Stdout)
+    err := createAction.Perform(message.NewTestPrinter())
 
     assert.Error(t, err)
 }
@@ -65,7 +65,7 @@ func TestCreateAction_Perform_Success(t *testing.T) {
         manifest.MockProject1,
         actionRepo)
 
-    err := createAction.Perform(os.Stdout)
+    err := createAction.Perform(message.NewTestPrinter())
 
     assert.NoError(t, err)
 }

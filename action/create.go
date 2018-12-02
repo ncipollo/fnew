@@ -5,8 +5,8 @@ import (
     "github.com/ncipollo/fnew/merger"
     "github.com/ncipollo/fnew/repo"
     "github.com/ncipollo/fnew/workspace"
-    "io"
     "net/url"
+    "github.com/ncipollo/fnew/message"
 )
 
 type CreateAction struct {
@@ -25,7 +25,7 @@ func NewCreateAction(checker workspace.DirectoryChecker,
     return &CreateAction{checker: checker, localPath: localPath, merger: merger, projectName: projectName, repo: repo}
 }
 
-func (action CreateAction) Perform(output io.Writer) error {
+func (action CreateAction) Perform(output message.Printer) error {
     err := action.verifyLocalPath()
     if err != nil {
         return err

@@ -2,7 +2,7 @@ package transform
 
 import (
     "bytes"
-    "github.com/ncipollo/fnew/message"
+    "github.com/ncipollo/fnew/testmessage"
     "github.com/stretchr/testify/assert"
     "testing"
 )
@@ -54,9 +54,9 @@ func TestInputTransform_Apply_UserProvidesVariable(t *testing.T) {
     assert.Equal(t, userInput, variables[inputTransformVariableName])
 }
 
-func createInputTransformTestObjects(options Options) (*InputTransform, *bytes.Buffer, *message.TestPrinter) {
+func createInputTransformTestObjects(options Options) (*InputTransform, *bytes.Buffer, *testmessage.TestPrinter) {
     input := new(bytes.Buffer)
-    output := message.NewTestPrinter()
+    output := testmessage.NewTestPrinter()
     inputTransform := NewInputTransform(options, input, output)
     return inputTransform, input, output
 }

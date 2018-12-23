@@ -1,7 +1,7 @@
 package transform
 
 import (
-    "github.com/ncipollo/fnew/message"
+    "github.com/ncipollo/fnew/testmessage"
     "github.com/stretchr/testify/assert"
     "testing"
 )
@@ -63,8 +63,8 @@ func createVariableTransformOptions(replace StringReplace, skipIfExists bool) *O
     }
 }
 
-func createVariableTransformTestObjects(options Options) (*VariableTransform, *message.TestPrinter) {
-    output := message.NewTestPrinter()
+func createVariableTransformTestObjects(options Options) (*VariableTransform, *testmessage.TestPrinter) {
+    output := testmessage.NewTestPrinter()
     transform := NewVariableTransform(options, output)
     return transform, output
 }

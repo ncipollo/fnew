@@ -1,11 +1,11 @@
 package transform
 
 import (
-    "github.com/stretchr/testify/mock"
-    "github.com/ncipollo/fnew/message"
-    "testing"
-    "github.com/stretchr/testify/assert"
     "errors"
+    "github.com/ncipollo/fnew/testmessage"
+    "github.com/stretchr/testify/assert"
+    "github.com/stretchr/testify/mock"
+    "testing"
 )
 
 const fileTransformInputPath = "input*"
@@ -49,9 +49,9 @@ func createFileTransformOptions() *Options {
 
 func createFileTransformTestObjects(globberPaths []string,
     globberErr error,
-    replacerErr error) (*FileTransform, *message.TestPrinter) {
+    replacerErr error) (*FileTransform, *testmessage.TestPrinter) {
     options := createFileTransformOptions()
-    output := message.NewTestPrinter()
+    output := testmessage.NewTestPrinter()
     globber := NewMockGlobber(globberPaths, globberErr)
     replacer := NewMockFileStringReplacer(replacerErr)
     transform := NewFileTransform(*options, output, globber, replacer)

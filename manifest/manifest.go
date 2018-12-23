@@ -1,9 +1,9 @@
 package manifest
 
 import (
-	"encoding/json"
-	"io/ioutil"
-	"net/url"
+    "encoding/json"
+    "io/ioutil"
+    "net/url"
 )
 
 const FileName = "manifest.json"
@@ -73,6 +73,10 @@ type Loader interface {
 }
 
 type FileLoader struct{}
+
+func NewFileLoader() Loader {
+    return &FileLoader{}
+}
 
 func (FileLoader) Load(filename string) (*Manifest, error) {
     data, err := ioutil.ReadFile(filename)

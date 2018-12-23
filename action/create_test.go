@@ -4,10 +4,11 @@ import (
     "github.com/ncipollo/fnew/manifest"
     "github.com/ncipollo/fnew/merger"
     "github.com/ncipollo/fnew/repo"
+    "github.com/ncipollo/fnew/testmessage"
+    "github.com/ncipollo/fnew/testrepo"
     "github.com/ncipollo/fnew/workspace"
     "github.com/stretchr/testify/assert"
     "testing"
-    "github.com/ncipollo/fnew/message"
 )
 
 const localPath = "/projects"
@@ -23,7 +24,7 @@ func TestCreateAction_Perform_LocalPathAlreadyExists(t *testing.T) {
         manifest.MockProject1,
         actionRepo)
 
-    err := createAction.Perform(message.NewTestPrinter())
+    err := createAction.Perform(testmessage.NewTestPrinter())
 
     assert.Error(t, err)
 }
@@ -37,7 +38,7 @@ func TestCreateAction_Perform_NoProjectFounds(t *testing.T) {
         "invalidProject",
         actionRepo)
 
-    err := createAction.Perform(message.NewTestPrinter())
+    err := createAction.Perform(testmessage.NewTestPrinter())
 
     assert.Error(t, err)
 }
@@ -51,7 +52,7 @@ func TestCreateAction_Perform_RepoCloneFails(t *testing.T) {
         manifest.MockProject1,
         actionRepo)
 
-    err := createAction.Perform(message.NewTestPrinter())
+    err := createAction.Perform(testmessage.NewTestPrinter())
 
     assert.Error(t, err)
 }
@@ -65,7 +66,7 @@ func TestCreateAction_Perform_Success(t *testing.T) {
         manifest.MockProject1,
         actionRepo)
 
-    err := createAction.Perform(message.NewTestPrinter())
+    err := createAction.Perform(testmessage.NewTestPrinter())
 
     assert.NoError(t, err)
 }
@@ -75,7 +76,7 @@ func localPathChecker(exists bool) workspace.DirectoryChecker {
 }
 
 func createActionRepo(shouldError bool) repo.Repo {
-    mockRepo := repo.NewMockRepo()
+    mockRepo := testrepo.NewMockRepo()
     mockRepo.StubClone(shouldError)
     return mockRepo
 }

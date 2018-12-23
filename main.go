@@ -1,25 +1,11 @@
 package main
 
 import (
-    "fmt"
-    "github.com/ncipollo/fnew/manifest"
-    "github.com/ncipollo/fnew/message"
-    "github.com/ncipollo/fnew/repo"
-    "github.com/ncipollo/fnew/transform"
-    "github.com/ncipollo/fnew/workspace"
+    "github.com/ncipollo/fnew/cmd"
     "os"
 )
 
 func main() {
-    appWorkspace := workspace.New(workspace.Directory(), workspace.OSDirectoryChecker(), workspace.OSDirectoryCreator())
-    err := appWorkspace.Setup()
-    fmt.Printf("Workspace Error: %v\n", err)
-
-    manifestRepo := repo.New()
-    _, err = manifestRepo.Clone(appWorkspace.ManifestsPath(), manifest.DefaultRepository)
-
-    options := transform.Options{OutputVariable: "$TEST"}
-    variables := transform.NewVariables()
-    inputTransform := transform.NewInputTransform(options, os.Stdin, message.NewStandardWriter())
-    inputTransform.Apply(variables)
+    parser := cmd.NewParser(os.Environ())
+    parser.Parse()
 }

@@ -3,14 +3,14 @@ package action
 import (
     "github.com/ncipollo/fnew/manifest"
     "github.com/ncipollo/fnew/merger"
+    "github.com/ncipollo/fnew/testmessage"
     "net/url"
     "testing"
-    "github.com/ncipollo/fnew/message"
 )
 
 func TestListAction_Perform_EmptyManifest(t *testing.T) {
     action := NewListAction(emptyManifestMerger())
-    output := message.NewTestPrinter()
+    output := testmessage.NewTestPrinter()
 
     action.Perform(output)
 
@@ -19,7 +19,7 @@ func TestListAction_Perform_EmptyManifest(t *testing.T) {
 
 func TestListAction_Perform_FullManifest(t *testing.T) {
     action := NewListAction(fullManifestMerger())
-    output := message.NewTestPrinter()
+    output := testmessage.NewTestPrinter()
 
     action.Perform(output)
 

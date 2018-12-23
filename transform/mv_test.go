@@ -1,11 +1,11 @@
 package transform
 
 import (
-    "github.com/stretchr/testify/mock"
-    "github.com/ncipollo/fnew/message"
-    "testing"
-    "github.com/stretchr/testify/assert"
     "errors"
+    "github.com/ncipollo/fnew/testmessage"
+    "github.com/stretchr/testify/assert"
+    "github.com/stretchr/testify/mock"
+    "testing"
 )
 
 func TestFileMoveTransform_Apply_Success(t *testing.T) {
@@ -108,8 +108,8 @@ func createFileMoveTransformOptions(inputPath string, outputPath string) *Option
     }
 }
 
-func createFileMoveTransformTestObjects(options Options, moverErr error) (*FileMoveTransform, *message.TestPrinter,) {
-    output := message.NewTestPrinter()
+func createFileMoveTransformTestObjects(options Options, moverErr error) (*FileMoveTransform, *testmessage.TestPrinter,) {
+    output := testmessage.NewTestPrinter()
     mover := NewMockFileMover(moverErr)
     transform := NewFileMoveTransform(options, output, mover)
     return transform, output

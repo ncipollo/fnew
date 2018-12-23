@@ -1,12 +1,12 @@
 package action
 
 import (
-    "testing"
-    "github.com/ncipollo/fnew/project"
-    "github.com/ncipollo/fnew/transform"
-    "github.com/ncipollo/fnew/message"
-    "github.com/stretchr/testify/assert"
     "errors"
+    "github.com/ncipollo/fnew/project"
+    "github.com/ncipollo/fnew/testmessage"
+    "github.com/ncipollo/fnew/transform"
+    "github.com/stretchr/testify/assert"
+    "testing"
 )
 
 const transformActionRepoPath = "path/to/repo"
@@ -14,7 +14,7 @@ const transformActionRepoPath = "path/to/repo"
 func TestTransformAction_Perform_FailsOnLoaderError(t *testing.T) {
     action, _ := createTransformActionTestObjects(errors.New("loader"), nil)
 
-    err := action.Perform(message.NewTestPrinter())
+    err := action.Perform(testmessage.NewTestPrinter())
 
     assert.Error(t, err)
 }
@@ -22,7 +22,7 @@ func TestTransformAction_Perform_FailsOnLoaderError(t *testing.T) {
 func TestTransformAction_Perform_FailsOnTransformerError(t *testing.T) {
     action, _ := createTransformActionTestObjects(nil, errors.New("transformer"))
 
-    err := action.Perform(message.NewTestPrinter())
+    err := action.Perform(testmessage.NewTestPrinter())
 
     assert.Error(t, err)
 }
@@ -30,7 +30,7 @@ func TestTransformAction_Perform_FailsOnTransformerError(t *testing.T) {
 func TestTransformAction_Perform_Success(t *testing.T) {
     action, transformer := createTransformActionTestObjects(nil, nil)
 
-    err := action.Perform(message.NewTestPrinter())
+    err := action.Perform(testmessage.NewTestPrinter())
 
     assert.NoError(t, err)
     transformer.AssertExpectations(t)

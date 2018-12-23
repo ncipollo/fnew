@@ -1,14 +1,14 @@
 package transform
 
 import (
-    "github.com/stretchr/testify/mock"
-    "os/exec"
-    "testing"
-    "github.com/ncipollo/fnew/message"
-    "github.com/stretchr/testify/assert"
-    "os"
-    "sort"
     "errors"
+    "github.com/ncipollo/fnew/testmessage"
+    "github.com/stretchr/testify/assert"
+    "github.com/stretchr/testify/mock"
+    "os"
+    "os/exec"
+    "sort"
+    "testing"
 )
 
 const scriptTransformInputPath = "script.sh"
@@ -80,8 +80,8 @@ func expectedCommand(args []string, environment []string) exec.Cmd {
 
 func createScriptTransformTestObjects(options Options,
     cmd exec.Cmd,
-    scriptErr error) (*ScriptTransform, *MockCommandRunner, *message.TestPrinter) {
-    output := message.NewTestPrinter()
+    scriptErr error) (*ScriptTransform, *MockCommandRunner, *testmessage.TestPrinter) {
+    output := testmessage.NewTestPrinter()
     runner := NewMockCommandRunner(cmd, scriptErr)
     transform := NewScriptTransform(options, output, runner)
     return transform, runner, output

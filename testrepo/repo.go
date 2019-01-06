@@ -52,7 +52,7 @@ func (repo *MockRepo) StubOpen(shouldError bool) {
         var noRepo *git.Repository = nil
         repo.On("Open", mock.Anything).Return(noRepo, errors.New("closed"))
     } else {
-        repo.On("Open", mock.Anything).Return(git.Repository{}, nil)
+        repo.On("Open", mock.Anything).Return(&git.Repository{}, nil)
     }
 }
 

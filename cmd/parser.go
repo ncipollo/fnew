@@ -38,11 +38,9 @@ func (parser *Parser) Parse() Command {
     parser.flag.Parse(os.Args[1:])
 
     if *list {
-        fmt.Println("List: ", *list)
         actionFactory := action.NewFactory("", "", *verbose)
         return parser.listCommand(actionFactory)
     } else if *update {
-        fmt.Println("Update: ", *update)
         actionFactory := action.NewFactory("", "", *verbose)
         return parser.updateCommand(actionFactory)
     } else {
@@ -70,7 +68,7 @@ func (Parser) listCommand(actionFactory *action.Factory) Command {
 }
 
 func (Parser) updateCommand(actionFactory *action.Factory) Command {
-    return nil
+    return NewUpdateCommand(actionFactory.Setup(), actionFactory.Update())
 }
 
 func (parser *Parser) localPath() (string, error) {

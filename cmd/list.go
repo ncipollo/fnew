@@ -11,7 +11,7 @@ type ListCommand struct {
     listAction  action.Action
 }
 
-func NewListCommand(setupAction action.Action, listAction action.Action) Command {
+func NewListCommand(setupAction action.Action, listAction action.Action) *ListCommand {
     return &ListCommand{setupAction: setupAction, listAction: listAction}
 }
 

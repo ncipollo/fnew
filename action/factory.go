@@ -85,3 +85,8 @@ func (factory *Factory) Transform() Action {
         factory.variables)
     return action
 }
+
+func (factory *Factory) Update() Action {
+    action := NewUpdateAction(factory.repo, factory.workspace)
+    return action
+}

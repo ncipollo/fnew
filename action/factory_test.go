@@ -43,6 +43,13 @@ func TestFactory_Transform(t *testing.T) {
     assert.Equal(t, action, factory.Transform())
 }
 
+func TestFactory_Update(t *testing.T) {
+    factory := createFactory()
+
+    action := NewUpdateAction(factory.repo, factory.workspace)
+    assert.Equal(t, action, factory.Update())
+}
+
 func createFactory() *Factory {
     return &Factory{localPath: factoryLocalPath, projectName: factoryProjectName}
 }

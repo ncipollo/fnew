@@ -38,8 +38,20 @@ func FullConfig() *Config {
 }
 
 func MinimalConfig() *Config {
-    return &Config{
-        ManifestRepoUrl: nil,
-        Manifest:        map[string]url.URL{},
-    }
+    return &Config{}
+}
+
+type MockWriter struct {
+    mock.Mock
+}
+
+func (writer *MockWriter) Write(config Config, filename string) error {
+    args := writer.Called(config, filename)
+    return args.Error(0)
+}
+
+func NewMockWriter(config Config, filename string, err error) *MockWriter {
+    mockWriter := MockWriter{}
+    mockWriter.On("Write", config, filename).Return(err)
+    return &mockWriter
 }

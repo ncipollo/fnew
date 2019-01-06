@@ -23,19 +23,23 @@ type Factory struct {
     workspace     workspace.Workspace
 }
 
-func NewFactory(localPath string, projectName string) *Factory {
+func NewFactory(localPath string, projectName string, verbose bool) *Factory {
     configLoader := config.NewLoader()
+    configWriter := config.NewWriter()
 
     directoryChecker := workspace.OSDirectoryChecker()
     directoryCreator := workspace.OSDirectoryCreator()
-    actionWorkspace := workspace.New(workspace.Directory(), directoryChecker, directoryCreator)
+    actionWorkspace := workspace.New(workspace.Directory(),
+        configWriter,
+        directoryChecker,
+        directoryCreator)
 
     manifestLoader := manifest.NewFileLoader()
     manifestMerger := merger.NewWorkspaceManifestMerger(configLoader,
         manifestLoader,
         actionWorkspace)
 
-    actionRepo := repo.New()
+    actionRepo := repo.New(verbose)
     projectLoader := project.NewLoader()
     transformer := transform.NewTransformer()
     variables := transform.NewVariables()

@@ -61,8 +61,14 @@ func TestFromString_ParsesJSON(t *testing.T) {
     assert.NoError(t, err)
 }
 
-func TestString(t *testing.T) {
+func TestString_FullConfig(t *testing.T) {
     jsonString := FullConfig().String()
 
     assert.Equal(t, validJSON, jsonString)
+}
+
+func TestString_MinimalConfig(t *testing.T) {
+    jsonString := MinimalConfig().String()
+
+    assert.Equal(t, "{}", jsonString)
 }

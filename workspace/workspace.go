@@ -6,20 +6,38 @@ import (
     "os"
     "os/user"
     "path"
+    "github.com/ncipollo/fnew/config"
 )
 
 type Workspace struct {
     basePath         string
+    configWriter     config.Writer
     directoryChecker DirectoryChecker
     directoryCreator DirectoryCreator
 }
 
-func New(basePath string, checker DirectoryChecker, creator DirectoryCreator) Workspace {
-    return Workspace{basePath: basePath, directoryChecker: checker, directoryCreator: creator}
+func New(basePath string,
+    configWriter config.Writer,
+    checker DirectoryChecker,
+    creator DirectoryCreator) Workspace {
+    return Workspace{basePath: basePath,
+        configWriter:     configWriter,
+        directoryChecker: checker,
+        directoryCreator: creator}
 }
 
 func (workspace Workspace) Setup() error {
-    return workspace.directoryCreator.CreateDirectory(workspace.ManifestsPath())
+    err := workspace.directoryCreator.CreateDirectory(workspace.ManifestsPath())
+    if err != nil {
+        return err
+    }
+
+    configPath := workspace.ConfigPath()
+    if !workspace.directoryChecker.DirectoryExists(configPath) {
+        err = workspace.configWriter.Write(config.Config{}, configPath)
+    }
+
+    return err
 }
 
 func (workspace Workspace) ConfigPath() string {

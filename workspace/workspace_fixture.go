@@ -3,6 +3,7 @@ package workspace
 import (
     "errors"
     "github.com/stretchr/testify/mock"
+    "github.com/ncipollo/fnew/config"
 )
 
 const BasePath = "/test"
@@ -25,8 +26,16 @@ func (checker MockDirectoryChecker) DirectoryExists(dir string) bool {
     return args.Bool(0)
 }
 
-func CreateMockWorkSpace(checker MockDirectoryChecker, creator MockDirectoryCreator) Workspace {
-    return New(BasePath, checker, creator)
+func CreateMockWorkSpace(checker MockDirectoryChecker,
+    creator MockDirectoryCreator) Workspace {
+    configWriter := config.NewMockWriter(config.Config{}, "", nil)
+    return New(BasePath, configWriter, checker, creator)
+}
+
+func CreateMockWorkSpaceWithConfigWriter(checker MockDirectoryChecker,
+    configWriter config.Writer,
+    creator MockDirectoryCreator) Workspace {
+    return New(BasePath, configWriter, checker, creator)
 }
 
 func CreateMockDirectoryChecker(exists bool) MockDirectoryChecker {

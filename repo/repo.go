@@ -3,6 +3,7 @@ package repo
 import (
     "gopkg.in/src-d/go-git.v4"
     "os"
+    "gopkg.in/src-d/go-git.v4/plumbing/protocol/packp/sideband"
 )
 
 type Repo interface {
@@ -12,17 +13,18 @@ type Repo interface {
 }
 
 type GitRepo struct {
+    verbose bool
 }
 
-func New() Repo {
-    return &GitRepo{}
+func New(verbose bool) Repo {
+    return &GitRepo{verbose: verbose}
 }
 
-func (GitRepo) Clone(localPath string, repoUrl string) (*git.Repository, error) {
+func (repo *GitRepo) Clone(localPath string, repoUrl string) (*git.Repository, error) {
     return git.PlainClone(localPath, false, &git.CloneOptions{
         URL:               repoUrl,
         RecurseSubmodules: git.DefaultSubmoduleRecursionDepth,
-        Progress:          os.Stdout,
+        Progress:          repo.progress(),
     })
 }
 
@@ -36,4 +38,12 @@ func (GitRepo) Pull(repository *git.Repository) error {
         return err
     }
     return tree.Pull(&git.PullOptions{RemoteName: "origin"})
+}
+
+func (repo *GitRepo) progress() sideband.Progress {
+    if repo.verbose {
+        return os.Stdout
+    } else {
+        return nil
+    }
 }

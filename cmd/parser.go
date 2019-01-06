@@ -10,6 +10,7 @@ import (
 
 const listUsage = "lists the available fnew projects"
 const updateUsage = "updates the fnew project list"
+const verboseUsage = "enables verbose output"
 const shortHandSuffix = " (shorthand)"
 
 type Parser struct {
@@ -32,16 +33,17 @@ func NewParser(env []string) *Parser {
 func (parser *Parser) Parse() Command {
     list := parser.setupListFlag()
     update := parser.setupUpdateFlag()
+    verbose := parser.setupVerbose()
 
     parser.flag.Parse(os.Args[1:])
 
     if *list {
         fmt.Println("List: ", *list)
-        actionFactory := action.NewFactory("", "")
+        actionFactory := action.NewFactory("", "", *verbose)
         return parser.listCommand(actionFactory)
     } else if *update {
         fmt.Println("Update: ", *update)
-        actionFactory := action.NewFactory("", "")
+        actionFactory := action.NewFactory("", "", *verbose)
         return parser.updateCommand(actionFactory)
     } else {
         if parser.flag.NArg() < 2 {
@@ -49,7 +51,7 @@ func (parser *Parser) Parse() Command {
         }
         localPath, _ := parser.localPath()
         projectName := parser.projectName()
-        actionFactory := action.NewFactory(localPath, projectName)
+        actionFactory := action.NewFactory(localPath, projectName, *verbose)
 
         fmt.Println("Project Name: ", projectName)
         fmt.Println("Local Path: ", localPath)
@@ -64,7 +66,7 @@ func (Parser) createCommand(actionFactory *action.Factory) Command {
 }
 
 func (Parser) listCommand(actionFactory *action.Factory) Command {
-    return nil
+    return NewListCommand(actionFactory.Setup(), actionFactory.List())
 }
 
 func (Parser) updateCommand(actionFactory *action.Factory) Command {
@@ -99,4 +101,12 @@ func (parser *Parser) setupUpdateFlag() *bool {
     parser.flag.BoolVar(&list, "u", false, updateUsage+shortHandSuffix)
 
     return &list
+}
+
+func (parser *Parser) setupVerbose() *bool {
+    var verbose bool
+    parser.flag.BoolVar(&verbose, "verbose", false, verboseUsage)
+    parser.flag.BoolVar(&verbose, "v", false, verboseUsage+shortHandSuffix)
+
+    return &verbose
 }

@@ -1,11 +1,11 @@
 package config
 
 import (
-	"encoding/json"
-	"github.com/ncipollo/fnew/manifest"
-	"io/ioutil"
-	"net/url"
-	"os"
+    "encoding/json"
+    "github.com/ncipollo/fnew/manifest"
+    "io/ioutil"
+    "net/url"
+    "os"
 )
 
 type Config struct {
@@ -53,8 +53,12 @@ func (config Config) String() string {
 }
 
 func (config Config) MarshalJSON() ([]byte, error) {
+    var urlString string
+    if config.ManifestRepoUrl != nil {
+        urlString = config.ManifestRepoUrl.String()
+    }
     rawConfig := rawConfig{
-        ManifestRepoUrl: config.ManifestRepoUrl.String(),
+        ManifestRepoUrl: urlString,
         Manifest:        config.Manifest,
     }
 
@@ -97,4 +101,18 @@ func (FileLoader) Load(filename string) (*Config, error) {
 
 func NewLoader() Loader {
     return &FileLoader{}
+}
+
+type Writer interface {
+    Write(config Config, filename string) error
+}
+
+type FileWriter struct{}
+
+func NewWriter() Writer {
+    return &FileWriter{}
+}
+
+func (FileWriter) Write(config Config, filename string) error {
+    return config.WriteToFile(filename, 0777)
 }

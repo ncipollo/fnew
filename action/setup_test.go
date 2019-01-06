@@ -8,6 +8,7 @@ import (
     "github.com/ncipollo/fnew/workspace"
     "github.com/stretchr/testify/mock"
     "testing"
+    "path/filepath"
 )
 
 func TestSetupAction_Perform_ReposDoNotExist(t *testing.T) {
@@ -54,12 +55,18 @@ func mockRepo() *testrepo.MockRepo {
 
 func workspaceWithRepos() workspace.Workspace {
     checker := workspace.CreateMockDirectoryChecker(true)
+    configWriter := config.NewMockWriter(config.Config{},
+        filepath.Join(workspace.BasePath, "config.json"),
+        nil)
     creator := workspace.CreateMockDirectoryCreator(false)
-    return workspace.CreateMockWorkSpace(checker, creator)
+    return workspace.CreateMockWorkSpaceWithConfigWriter(checker, configWriter, creator)
 }
 
 func workspaceWithoutRepos() workspace.Workspace {
     checker := workspace.CreateMockDirectoryChecker(false)
+    configWriter := config.NewMockWriter(config.Config{},
+        filepath.Join(workspace.BasePath, "config.json"),
+        nil)
     creator := workspace.CreateMockDirectoryCreator(false)
-    return workspace.CreateMockWorkSpace(checker, creator)
+    return workspace.CreateMockWorkSpaceWithConfigWriter(checker, configWriter, creator)
 }

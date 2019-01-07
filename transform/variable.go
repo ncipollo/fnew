@@ -22,6 +22,8 @@ func (transform *VariableTransform) Apply(variables Variables) error {
     skipIfOutputExists := transform.Options.SkipIfVariableExists
     stringReplace := transform.Options.StringReplace
     skip := len(output) != 0 && skipIfOutputExists
+    prefix := transform.Options.StringPrefix
+    suffix := transform.Options.StringSuffix
 
     transform.output.Println(transform.transformMessage())
     if skip {
@@ -29,7 +31,7 @@ func (transform *VariableTransform) Apply(variables Variables) error {
         return nil
     }
 
-    variables[outputKey] = stringReplace.Replace(input, variables)
+    variables[outputKey] = prefix + stringReplace.Replace(input, variables) + suffix
 
     return nil
 }

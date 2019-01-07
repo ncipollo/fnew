@@ -16,11 +16,13 @@ const (
             "output_path" : "output/path",
             "output_variable" : "$outputVariable",
             "skip_if_variable_exists" : true,
+            "string_prefix" : "prefix",
             "string_replace" : {
                 "old" : "old",
                 "new" : "new"
             },
-        "type": "file_move"
+            "string_suffix" : "suffix",
+            "type": "file_move"
         }
     ] 
 }`
@@ -50,11 +52,13 @@ func TestFromJSON_AllTransformOptions(t *testing.T) {
                 OutputPath:           "output/path",
                 OutputVariable:       "$outputVariable",
                 SkipIfVariableExists: true,
+                StringPrefix:         "prefix",
                 StringReplace: transform.StringReplace{
                     Old: "old",
                     New: "new",
                 },
-                Type: transform.TypeFileMove,
+                StringSuffix: "suffix",
+                Type:         transform.TypeFileMove,
             },
         },
     }

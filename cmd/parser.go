@@ -51,9 +51,6 @@ func (parser *Parser) Parse() Command {
         projectName := parser.projectName()
         actionFactory := action.NewFactory(localPath, projectName, *verbose)
 
-        fmt.Println("Project Name: ", projectName)
-        fmt.Println("Local Path: ", localPath)
-
         return parser.createCommand(actionFactory)
     }
 

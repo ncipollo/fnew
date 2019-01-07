@@ -23,7 +23,9 @@ type Options struct {
     OutputPath           string        `json:"output_path,omitempty"`
     OutputVariable       string        `json:"output_variable,omitempty"`
     SkipIfVariableExists bool          `json:"skip_if_variable_exists,omitempty"`
+    StringPrefix         string        `json:"string_prefix,omitempty"`
     StringReplace        StringReplace `json:"string_replace,omitempty"`
+    StringSuffix         string        `json:"string_suffix,omitempty"`
     Type                 Type          `json:"type"`
 }
 

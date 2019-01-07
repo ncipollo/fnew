@@ -6,6 +6,7 @@ import (
     "errors"
     "os"
     "strings"
+    "path/filepath"
 )
 
 type FileMoveTransform struct {
@@ -83,6 +84,47 @@ func NewFileMover() FileMover {
     return &osFileMover{}
 }
 
-func (osFileMover) Move(oldPath string, newPath string) error {
-    return os.Rename(oldPath, newPath)
+func (mover *osFileMover) Move(oldPath string, newPath string) error {
+    absOldPath, err := filepath.Abs(oldPath)
+    if err != nil {
+        return err
+    }
+    absNewPath, err := filepath.Abs(newPath)
+    if err != nil {
+        return err
+    }
+    absNewDir, err := filepath.Abs(filepath.Join(absNewPath, ".."))
+    if err != nil {
+        return err
+    }
+    err = os.MkdirAll(absNewDir, 0777)
+    if err != nil {
+        return err
+    }
+    err = os.Rename(absOldPath, absNewPath)
+    if err != nil {
+        return err
+    }
+    return mover.removeEmptyDirectory(absOldPath)
+}
+
+func (osFileMover) removeEmptyDirectory(absOldPath string) error {
+    absOldDir, err := filepath.Abs(filepath.Join(absOldPath, ".."))
+    if err != nil {
+        return err
+    }
+
+    var notEmpty bool
+    err = filepath.Walk(absOldDir, func(path string, info os.FileInfo, err error) error {
+        if err == nil && path != absOldDir {
+            notEmpty = true
+        }
+        return err
+    })
+
+    if !notEmpty {
+        return os.RemoveAll(absOldDir)
+    }
+
+    return nil
 }

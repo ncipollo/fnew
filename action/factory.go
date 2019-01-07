@@ -42,7 +42,9 @@ func NewFactory(localPath string, projectName string, verbose bool) *Factory {
     actionRepo := repo.New(verbose)
     projectLoader := project.NewLoader()
     transformer := transform.NewTransformer()
+
     variables := transform.NewVariables()
+    variables.AddEnv()
 
     return &Factory{
         LocalPath:     localPath,

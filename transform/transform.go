@@ -1,6 +1,9 @@
 package transform
 
-import "strings"
+import (
+    "strings"
+    "os"
+)
 
 type Type string
 
@@ -61,4 +64,13 @@ type Variables map[string]string
 
 func NewVariables() Variables {
     return make(Variables)
+}
+
+func (variables Variables) AddEnv() {
+    for _, env := range os.Environ() {
+        parts := strings.Split(env, "=")
+        key := parts[0]
+        value := parts[1]
+        variables[key] = value
+    }
 }

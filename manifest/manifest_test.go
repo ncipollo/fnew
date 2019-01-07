@@ -23,7 +23,7 @@ func TestConfigDirectory(t *testing.T) {
 }
 
 func TestDefaultRepository(t *testing.T) {
-    assert.Equal(t, "https://github.com/ncipollo/fnew-manifest.git", DefaultRepository)
+    assert.Equal(t, "https://github.com/file-new/fnew-manifest.git", DefaultRepository)
 }
 
 func TestFromString_FailsToParseInvalidJson(t *testing.T) {

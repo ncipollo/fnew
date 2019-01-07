@@ -4,25 +4,32 @@ import (
     "github.com/ncipollo/fnew/action"
     "github.com/ncipollo/fnew/message"
     "fmt"
+    "os"
 )
 
 type CreateCommand struct {
-    setupAction     action.Action
-    createAction    action.Action
-    transformAction action.Action
-    cleanupAction   action.Action
+    localPath        string
+    directoryChanger DirectoryChanger
+    setupAction      action.Action
+    createAction     action.Action
+    transformAction  action.Action
+    cleanupAction    action.Action
 }
 
 func NewCreateCommand(
+    localPath string,
+    directoryChanger DirectoryChanger,
     setupAction action.Action,
     createAction action.Action,
     transformAction action.Action,
     cleanupAction action.Action) *CreateCommand {
     return &CreateCommand{
-        setupAction:     setupAction,
-        createAction:    createAction,
-        transformAction: transformAction,
-        cleanupAction:   cleanupAction,
+        localPath:        localPath,
+        directoryChanger: directoryChanger,
+        setupAction:      setupAction,
+        createAction:     createAction,
+        transformAction:  transformAction,
+        cleanupAction:    cleanupAction,
     }
 }
 
@@ -39,6 +46,12 @@ func (command *CreateCommand) Run(printer message.Printer) error {
         return err
     }
 
+    err = command.moveIntoProject()
+    if err != nil {
+        printer.Println(command.moveIntoProjectErrorMessage(err))
+        return err
+    }
+
     err = command.transformAction.Perform(printer)
     if err != nil {
         printer.Println(command.transformErrorMessage(err))
@@ -48,6 +61,12 @@ func (command *CreateCommand) Run(printer message.Printer) error {
     err = command.cleanupAction.Perform(printer)
     if err != nil {
         printer.Println(command.cleanupErrorMessage(err))
+        return err
+    }
+
+    err = command.moveOutOfProject()
+    if err != nil {
+        printer.Println(command.moveOutOfProjectErrorMessage(err))
         return err
     }
 
@@ -71,6 +90,33 @@ func (CreateCommand) cleanupErrorMessage(err error) string {
     return fmt.Sprintf("Transform failed. Error: %v", err)
 }
 
+func (CreateCommand) moveIntoProjectErrorMessage(err error) string {
+    return fmt.Sprintf("Failed to move into project. Error: %v", err)
+}
+
+func (CreateCommand) moveOutOfProjectErrorMessage(err error) string {
+    return fmt.Sprintf("Failed to move into project. Error: %v", err)
+}
+
 func (CreateCommand) completionMessage() string {
     return fmt.Sprintf("Project created!")
+}
+
+func (command *CreateCommand) moveIntoProject() error {
+    return command.directoryChanger.Chdir(command.localPath)
+}
+
+func (command *CreateCommand) moveOutOfProject() error {
+    return command.directoryChanger.Chdir("..")
+}
+
+type DirectoryChanger interface {
+    Chdir(dir string) error
+}
+
+type OSDirectoryChanger struct {
+}
+
+func (OSDirectoryChanger) Chdir(dir string) error {
+    return os.Chdir(dir)
 }

@@ -60,7 +60,9 @@ func (parser *Parser) Parse() Command {
 }
 
 func (Parser) createCommand(actionFactory *action.Factory) Command {
-    return NewCreateCommand(actionFactory.Setup(),
+    return NewCreateCommand(actionFactory.LocalPath,
+        OSDirectoryChanger{},
+        actionFactory.Setup(),
         actionFactory.Create(),
         actionFactory.Transform(),
         actionFactory.Cleanup())

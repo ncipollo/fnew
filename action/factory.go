@@ -11,12 +11,12 @@ import (
 )
 
 type Factory struct {
+    LocalPath     string
+    ProjectName   string
     checker       workspace.DirectoryChecker
     configLoader  config.Loader
-    localPath     string
     merger        merger.Merger
     projectLoader project.Loader
-    projectName   string
     repo          repo.Repo
     transformer   transform.Transformer
     variables     transform.Variables
@@ -45,11 +45,11 @@ func NewFactory(localPath string, projectName string, verbose bool) *Factory {
     variables := transform.NewVariables()
 
     return &Factory{
+        LocalPath:     localPath,
+        ProjectName:   projectName,
         checker:       directoryChecker,
         configLoader:  configLoader,
-        localPath:     localPath,
         merger:        manifestMerger,
-        projectName:   projectName,
         projectLoader: projectLoader,
         repo:          actionRepo,
         transformer:   transformer,
@@ -60,16 +60,16 @@ func NewFactory(localPath string, projectName string, verbose bool) *Factory {
 
 func (factory *Factory) Create() Action {
     action := NewCreateAction(factory.checker,
-        factory.localPath,
+        factory.LocalPath,
         factory.merger,
-        factory.projectName,
+        factory.ProjectName,
         factory.repo)
 
     return action
 }
 
 func (factory *Factory) Cleanup() Action {
-    action := NewCleanupAction(factory.localPath, factory.repo)
+    action := NewCleanupAction(factory.LocalPath, factory.repo)
     return action
 }
 
@@ -84,7 +84,7 @@ func (factory *Factory) Setup() Action {
 }
 
 func (factory *Factory) Transform() Action {
-    action := NewTransformAction(factory.localPath,
+    action := NewTransformAction(factory.LocalPath,
         factory.checker,
         factory.projectLoader,
         factory.transformer,

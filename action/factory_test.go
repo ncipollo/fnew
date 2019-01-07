@@ -12,9 +12,9 @@ func TestFactory_Create(t *testing.T) {
     factory := createFactory()
 
     action := NewCreateAction(factory.checker,
-        factory.localPath,
+        factory.LocalPath,
         factory.merger,
-        factory.projectName,
+        factory.ProjectName,
         factory.repo)
     assert.Equal(t, action, factory.Create())
 }
@@ -22,7 +22,7 @@ func TestFactory_Create(t *testing.T) {
 func TestFactory_Cleanup(t *testing.T) {
     factory := createFactory()
 
-    action := NewCleanupAction(factory.localPath, factory.repo)
+    action := NewCleanupAction(factory.LocalPath, factory.repo)
     assert.Equal(t, action, factory.Cleanup())
 }
 
@@ -44,7 +44,7 @@ func TestFactory_Transform(t *testing.T) {
     factory := createFactory()
 
     action := NewTransformAction(
-        factory.localPath,
+        factory.LocalPath,
         factory.checker,
         factory.projectLoader,
         factory.transformer,
@@ -60,5 +60,5 @@ func TestFactory_Update(t *testing.T) {
 }
 
 func createFactory() *Factory {
-    return &Factory{localPath: factoryLocalPath, projectName: factoryProjectName}
+    return NewFactory(factoryLocalPath, factoryProjectName, false)
 }

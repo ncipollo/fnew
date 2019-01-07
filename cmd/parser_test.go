@@ -1,17 +1,44 @@
 package cmd
 
 import (
-    "github.com/stretchr/testify/assert"
     "os"
     "testing"
+    "github.com/stretchr/testify/assert"
 )
 
-func TestParser_Parse(t *testing.T) {
-    // TODO: Actually test commands once implemented
+func TestParser_Parse_CreateCommand(t *testing.T) {
     parser := setupParser("project", "/")
 
     cmd := parser.Parse()
-    assert.Nil(t, cmd)
+    assert.IsType(t, &CreateCommand{}, cmd)
+}
+
+func TestParser_Parse_ListCommand(t *testing.T) {
+    parser := setupParser("--list")
+
+    cmd := parser.Parse()
+    assert.IsType(t, &ListCommand{}, cmd)
+}
+
+func TestParser_Parse_ListCommand_Shorthand(t *testing.T) {
+    parser := setupParser("-l")
+
+    cmd := parser.Parse()
+    assert.IsType(t, &ListCommand{}, cmd)
+}
+
+func TestParser_Parse_UpdateCommand(t *testing.T) {
+    parser := setupParser("--update")
+
+    cmd := parser.Parse()
+    assert.IsType(t, &UpdateCommand{}, cmd)
+}
+
+func TestParser_Parse_UpdateCommand_Shorthand(t *testing.T) {
+    parser := setupParser("-u")
+
+    cmd := parser.Parse()
+    assert.IsType(t, &UpdateCommand{}, cmd)
 }
 
 func setupParser(args ...string) *Parser {

@@ -7,12 +7,13 @@ import (
     "github.com/ncipollo/fnew/transform"
     "github.com/stretchr/testify/assert"
     "testing"
+    "github.com/ncipollo/fnew/workspace"
 )
 
 const transformActionRepoPath = "path/to/repo"
 
 func TestTransformAction_Perform_FailsOnLoaderError(t *testing.T) {
-    action, _ := createTransformActionTestObjects(errors.New("loader"), nil)
+    action, _ := createTransformActionTestObjects(true, errors.New("loader"), nil)
 
     err := action.Perform(testmessage.NewTestPrinter())
 
@@ -20,7 +21,7 @@ func TestTransformAction_Perform_FailsOnLoaderError(t *testing.T) {
 }
 
 func TestTransformAction_Perform_FailsOnTransformerError(t *testing.T) {
-    action, _ := createTransformActionTestObjects(nil, errors.New("transformer"))
+    action, _ := createTransformActionTestObjects(true, nil, errors.New("transformer"))
 
     err := action.Perform(testmessage.NewTestPrinter())
 
@@ -28,7 +29,7 @@ func TestTransformAction_Perform_FailsOnTransformerError(t *testing.T) {
 }
 
 func TestTransformAction_Perform_Success(t *testing.T) {
-    action, transformer := createTransformActionTestObjects(nil, nil)
+    action, transformer := createTransformActionTestObjects(true, nil, nil)
 
     err := action.Perform(testmessage.NewTestPrinter())
 
@@ -36,7 +37,16 @@ func TestTransformAction_Perform_Success(t *testing.T) {
     transformer.AssertExpectations(t)
 }
 
+func TestTransformAction_Perform_Success_NoProject(t *testing.T) {
+    action, _ := createTransformActionTestObjects(false, nil, errors.New("transformer"))
+
+    err := action.Perform(testmessage.NewTestPrinter())
+
+    assert.NoError(t, err)
+}
+
 func createTransformActionTestObjects(
+    projectExists bool,
     loaderError error,
     transformerError error) (*TransformAction, *transform.MockTransformer) {
 
@@ -56,5 +66,11 @@ func createTransformActionTestObjects(
 
     transformer := transform.NewMockTransformer(transforms, variables, transformerError)
 
-    return NewTransformAction(transformActionRepoPath, loader, transformer, variables), transformer
+    checker := workspace.CreateMockDirectoryChecker(projectExists)
+
+    return NewTransformAction(transformActionRepoPath,
+        checker,
+        loader,
+        transformer,
+        variables), transformer
 }

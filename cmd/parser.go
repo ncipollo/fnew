@@ -60,7 +60,10 @@ func (parser *Parser) Parse() Command {
 }
 
 func (Parser) createCommand(actionFactory *action.Factory) Command {
-    return nil
+    return NewCreateCommand(actionFactory.Setup(),
+        actionFactory.Create(),
+        actionFactory.Transform(),
+        actionFactory.Cleanup())
 }
 
 func (Parser) listCommand(actionFactory *action.Factory) Command {
@@ -71,13 +74,13 @@ func (Parser) updateCommand(actionFactory *action.Factory) Command {
     return NewUpdateCommand(actionFactory.Setup(), actionFactory.Update())
 }
 
+func (parser *Parser) projectName() string {
+    return parser.flag.Arg(0)
+}
+
 func (parser *Parser) localPath() (string, error) {
     relativePath := parser.flag.Arg(1)
     return filepath.Abs(relativePath)
-}
-
-func (parser *Parser) projectName() string {
-    return parser.flag.Arg(0)
 }
 
 func (parser *Parser) printUsageAndExit() {

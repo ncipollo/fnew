@@ -68,6 +68,11 @@ func (factory *Factory) Create() Action {
     return action
 }
 
+func (factory *Factory) Cleanup() Action {
+    action := NewCleanupAction(factory.localPath, factory.repo)
+    return action
+}
+
 func (factory *Factory) List() Action {
     action := NewListAction(factory.merger)
     return action
@@ -80,6 +85,7 @@ func (factory *Factory) Setup() Action {
 
 func (factory *Factory) Transform() Action {
     action := NewTransformAction(factory.localPath,
+        factory.checker,
         factory.projectLoader,
         factory.transformer,
         factory.variables)

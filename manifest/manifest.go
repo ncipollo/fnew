@@ -9,7 +9,7 @@ import (
 const FileName = "manifest.json"
 const ConfigDirectory = "config"
 const DefaultDirectory = "default"
-const DefaultRepository = "https://github.com/ncipollo/fnew-manifest.git"
+const DefaultRepository = "https://github.com/file-new/fnew-manifest.git"
 
 type Manifest map[string]url.URL
 

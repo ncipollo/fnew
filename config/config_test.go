@@ -3,7 +3,6 @@ package config
 import (
     "github.com/stretchr/testify/assert"
     "io/ioutil"
-    "net/url"
     "os"
     "path/filepath"
     "testing"
@@ -41,16 +40,10 @@ func TestFromString_FailsToParseInvalidJson(t *testing.T) {
     assert.Error(t, err)
 }
 
-func TestFromString_FailsToParseInvalidUrl(t *testing.T) {
-    _, err := FromString(invalidUrl)
-
-    assert.Error(t, err)
-}
-
 func TestFromString_ParsesEmptyJSON(t *testing.T) {
     parsedManifest, err := FromString("{}")
 
-    assert.Equal(t, &Config{Manifest: map[string]url.URL{}}, parsedManifest)
+    assert.Equal(t, &Config{Manifest: map[string]string{}}, parsedManifest)
     assert.NoError(t, err)
 }
 

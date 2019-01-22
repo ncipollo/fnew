@@ -4,7 +4,6 @@ import (
     "github.com/ncipollo/fnew/manifest"
     "github.com/ncipollo/fnew/merger"
     "github.com/ncipollo/fnew/testmessage"
-    "net/url"
     "testing"
 )
 
@@ -35,11 +34,11 @@ func emptyManifestMerger() merger.Merger {
 }
 
 func fullManifestMerger() merger.Merger {
-    testUrl, _ := url.Parse("http://www.example1.com")
+    testUrl := "http://www.example1.com"
     emptyManifest := manifest.Manifest{
-        "a": *testUrl,
-        "b": *testUrl,
-        "c": *testUrl,
+        "a": testUrl,
+        "b": testUrl,
+        "c": testUrl,
     }
     return merger.NewMockMerger(emptyManifest)
 }

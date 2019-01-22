@@ -3,7 +3,6 @@ package manifest
 import (
     "encoding/json"
     "io/ioutil"
-    "net/url"
 )
 
 const FileName = "manifest.json"
@@ -11,7 +10,7 @@ const ConfigDirectory = "config"
 const DefaultDirectory = "default"
 const DefaultRepository = "https://github.com/file-new/fnew-manifest.git"
 
-type Manifest map[string]url.URL
+type Manifest map[string]string
 
 func FromJSON(data []byte) (*Manifest, error) {
     manifest := Manifest{}
@@ -40,32 +39,6 @@ func (manifest Manifest) String() string {
         return ""
     }
     return string(bytes)
-}
-
-func (manifest Manifest) MarshalJSON() ([]byte, error) {
-    rawManifest := map[string]string{}
-    for key, repoUrl := range manifest {
-        rawManifest[key] = repoUrl.String()
-    }
-    return json.Marshal(rawManifest)
-}
-
-func (manifest Manifest) UnmarshalJSON(data []byte) error {
-    var rawManifest map[string]string
-    err := json.Unmarshal(data, &rawManifest)
-    if err != nil {
-        return err
-    }
-
-    for key, value := range rawManifest {
-        repoUrl, err := url.Parse(value)
-        if err != nil {
-            return err
-        }
-        manifest[key] = *repoUrl
-    }
-
-    return nil
 }
 
 type Loader interface {

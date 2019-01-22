@@ -7,7 +7,6 @@ import (
     "github.com/ncipollo/fnew/workspace"
     "github.com/stretchr/testify/assert"
     "github.com/stretchr/testify/mock"
-    "net/url"
     "path"
     "testing"
 )
@@ -15,8 +14,8 @@ import (
 const configProject = "config"
 const defaultProject = "default"
 
-var configUrl, _ = url.Parse("http://www.example/config.com")
-var defaultUrl, _ = url.Parse("http://www.example/default.com")
+var configUrl = "http://www.example/config.com"
+var defaultUrl = "http://www.example/default.com"
 
 func TestWorkspaceManifestMerger_ErrorLoadingManifestsReturnEmptyManifest(t *testing.T) {
     configLoader := config.MockLoaderWithoutRepoUrl()
@@ -42,8 +41,8 @@ func TestWorkspaceManifestMerger_MergedManifest(t *testing.T) {
     mergedManifest := merger.MergedManifest()
 
     expectedManifest := &manifest.Manifest{
-        configProject:  *configUrl,
-        defaultProject: *defaultUrl,
+        configProject:  configUrl,
+        defaultProject: defaultUrl,
     }
 
     assert.Equal(t, expectedManifest, mergedManifest)
@@ -74,9 +73,9 @@ func defaultManifestPath(currentWorkspace *workspace.Workspace) string {
 }
 
 func mockConfigManifest() *manifest.Manifest {
-    return &manifest.Manifest{configProject: *configUrl}
+    return &manifest.Manifest{configProject: configUrl}
 }
 
 func mockDefaultManifest() *manifest.Manifest {
-    return &manifest.Manifest{defaultProject: *defaultUrl}
+    return &manifest.Manifest{defaultProject: defaultUrl}
 }

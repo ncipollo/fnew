@@ -1,16 +1,15 @@
 package manifest
 
 import (
-	"errors"
-	"github.com/stretchr/testify/mock"
-	"net/url"
+    "errors"
+    "github.com/stretchr/testify/mock"
 )
 
 const MockProject1 = "project1"
 const MockProject2 = "project2"
 
-var url1, _ = url.Parse("http://www.example1.com")
-var url2, _ = url.Parse("http://www.example2.com")
+var url1 = "http://www.example1.com"
+var url2 = "http://www.example2.com"
 
 type MockLoader struct {
     mock.Mock
@@ -34,7 +33,7 @@ func (mockLoader *MockLoader) Load(filename string) (*Manifest, error) {
 
 func FullManifest() *Manifest {
     return &Manifest{
-        MockProject1: *url1,
-        MockProject2: *url2,
+        MockProject1: url1,
+        MockProject2: url2,
     }
 }

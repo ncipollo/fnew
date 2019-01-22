@@ -4,17 +4,11 @@ import (
     "encoding/json"
     "github.com/ncipollo/fnew/manifest"
     "io/ioutil"
-    "net/url"
     "os"
 )
 
 type Config struct {
-    ManifestRepoUrl *url.URL
-    Manifest        manifest.Manifest
-}
-
-type rawConfig struct {
-    ManifestRepoUrl string            `json:"repo,omitempty"`
+    ManifestRepoUrl string `json:"repo,omitempty"`
     Manifest        manifest.Manifest `json:"manifest,omitempty"`
 }
 
@@ -27,7 +21,7 @@ func FromFile(filename string) (*Config, error) {
 }
 
 func FromJSON(data []byte) (*Config, error) {
-    config := Config{}
+    config := Config{Manifest: map[string]string{}}
     err := json.Unmarshal(data, &config)
     if err != nil {
         return nil, err
@@ -52,39 +46,6 @@ func (config Config) String() string {
     return string(bytes)
 }
 
-func (config Config) MarshalJSON() ([]byte, error) {
-    var urlString string
-    if config.ManifestRepoUrl != nil {
-        urlString = config.ManifestRepoUrl.String()
-    }
-    rawConfig := rawConfig{
-        ManifestRepoUrl: urlString,
-        Manifest:        config.Manifest,
-    }
-
-    return json.Marshal(rawConfig)
-}
-
-func (config *Config) UnmarshalJSON(data []byte) error {
-    rawConfig := rawConfig{Manifest: map[string]url.URL{}}
-    err := json.Unmarshal(data, &rawConfig)
-    if err != nil {
-        return err
-    }
-
-    if rawConfig.ManifestRepoUrl != "" {
-        config.ManifestRepoUrl, err = url.Parse(rawConfig.ManifestRepoUrl)
-        if err != nil {
-            return err
-        }
-    } else {
-        config.ManifestRepoUrl = nil
-    }
-    config.Manifest = rawConfig.Manifest
-
-    return nil
-}
-
 type Loader interface {
     Load(filename string) (*Config, error)
 }
@@ -92,11 +53,7 @@ type Loader interface {
 type FileLoader struct{}
 
 func (FileLoader) Load(filename string) (*Config, error) {
-    data, err := ioutil.ReadFile(filename)
-    if err != nil {
-        return nil, err
-    }
-    return FromJSON(data)
+    return FromFile(filename)
 }
 
 func NewLoader() Loader {

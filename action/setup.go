@@ -42,11 +42,11 @@ func (action *SetupAction) Perform(output message.Printer) error {
 }
 
 func (action *SetupAction) fetchConfigManifestIfNeeded(userConfig *config.Config) error {
-    if userConfig.ManifestRepoUrl == nil {
+    if userConfig.ManifestRepoUrl == "" {
         return nil
     }
     if !action.workspace.ConfigManifestRepoExists() {
-        _, err := action.repo.Clone(action.workspace.ConfigManifestRepoPath(), userConfig.ManifestRepoUrl.String())
+        _, err := action.repo.Clone(action.workspace.ConfigManifestRepoPath(), userConfig.ManifestRepoUrl)
         return err
     }
     return nil

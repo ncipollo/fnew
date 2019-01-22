@@ -1,11 +1,14 @@
 package repo
 
 import (
+    "golang.org/x/crypto/ssh"
     "gopkg.in/src-d/go-git.v4"
+    "io/ioutil"
     "os"
     "gopkg.in/src-d/go-git.v4/plumbing/protocol/packp/sideband"
     "gopkg.in/src-d/go-git.v4/plumbing/transport"
-    "gopkg.in/src-d/go-git.v4/plumbing/transport/ssh"
+    go_git_ssh "gopkg.in/src-d/go-git.v4/plumbing/transport/ssh"
+    "os/user"
     "path/filepath"
 )
 
@@ -39,7 +42,7 @@ func (repo *GitRepo) Clone(localPath string, repoUrl string) (*git.Repository, e
 }
 
 func (repo *GitRepo) Delete(localPath string) error {
-    fullPath := filepath.Join(localPath,".git")
+    fullPath := filepath.Join(localPath, ".git")
     return os.RemoveAll(fullPath)
 }
 
@@ -69,22 +72,46 @@ func (repo *GitRepo) Pull(repository *git.Repository) error {
     return tree.Pull(&git.PullOptions{Auth: auth, RemoteName: "origin"})
 }
 
-func (GitRepo) auth(repoUrl string) (transport.AuthMethod, error) {
+func (repo *GitRepo) auth(repoUrl string) (transport.AuthMethod, error) {
     ep, err := transport.NewEndpoint(repoUrl)
     if err != nil {
         return nil, err
     }
     switch ep.Protocol {
     case "ssh":
-        auth, err := ssh.NewSSHAgentAuth(ep.User)
+        auth, err := repo.defaultSSHAuth()
         if err != nil {
-            return nil, err
+            auth, err = go_git_ssh.NewSSHAgentAuth(ep.User)
+            if err != nil {
+                return nil, err
+            }
         }
-
         return auth, nil
     default:
         return nil, nil
     }
+}
+
+func (repo *GitRepo) defaultSSHAuth() (transport.AuthMethod, error) {
+    usr, err := user.Current()
+    if err != nil {
+        return nil, err
+    }
+
+    sshKeyPath := usr.HomeDir + "/.ssh/id_rsa"
+
+    sshKey, err := ioutil.ReadFile(sshKeyPath)
+    if err != nil {
+        return nil, err
+    }
+
+    signer, err := ssh.ParsePrivateKey([]byte(sshKey))
+    if err != nil {
+        return nil, err
+    }
+
+    auth := &go_git_ssh.PublicKeys{User: "git", Signer: signer}
+    return auth, nil
 }
 
 func (repo *GitRepo) progress() sideband.Progress {

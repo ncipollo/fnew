@@ -5,7 +5,6 @@ import (
     "github.com/ncipollo/fnew/merger"
     "github.com/ncipollo/fnew/repo"
     "github.com/ncipollo/fnew/workspace"
-    "net/url"
     "github.com/ncipollo/fnew/message"
 )
 
@@ -36,7 +35,7 @@ func (action CreateAction) Perform(output message.Printer) error {
         return err
     }
 
-    _, err = action.repo.Clone(action.localPath, projectUrl.String())
+    _, err = action.repo.Clone(action.localPath, projectUrl)
 
     return err
 }
@@ -48,11 +47,11 @@ func (action CreateAction) verifyLocalPath() error {
     return nil
 }
 
-func (action CreateAction) getProjectUrl() (url.URL, error) {
+func (action CreateAction) getProjectUrl() (string, error) {
     mergedManifest := action.merger.MergedManifest()
     projectUrl := (*mergedManifest)[action.projectName]
-    if len(projectUrl.String()) == 0 {
-        return url.URL{}, errors.New("project not found")
+    if len(projectUrl) == 0 {
+        return "", errors.New("project not found")
     }
     return projectUrl, nil
 }

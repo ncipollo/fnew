@@ -2,7 +2,6 @@ package config
 
 import (
     "github.com/stretchr/testify/mock"
-    "net/url"
 )
 
 type MockLoader struct {
@@ -28,11 +27,11 @@ func MockLoaderWithoutRepoUrl() Loader {
 }
 
 func FullConfig() *Config {
-    repoUrl, _ := url.Parse("http://www.example.com")
+    repoUrl := "http://www.example.com"
     return &Config{
         ManifestRepoUrl: repoUrl,
-        Manifest: map[string]url.URL{
-            "project1": *repoUrl,
+        Manifest: map[string]string{
+            "project1": repoUrl,
         },
     }
 }

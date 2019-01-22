@@ -20,7 +20,7 @@ func TestSetupAction_Perform_ReposDoNotExist(t *testing.T) {
     setupAction.Perform(testmessage.NewTestPrinter())
 
     mockRepo.AssertCloneCalled(t, mockWorkSpace.DefaultManifestRepoPath(), manifest.DefaultRepository)
-    mockRepo.AssertCloneCalled(t, mockWorkSpace.ConfigManifestRepoPath(), config.FullConfig().ManifestRepoUrl.String())
+    mockRepo.AssertCloneCalled(t, mockWorkSpace.ConfigManifestRepoPath(), config.FullConfig().ManifestRepoUrl)
 }
 
 func TestSetupAction_Perform_ReposDoNotExist_NoConfigRepoUrl(t *testing.T) {
@@ -44,7 +44,7 @@ func TestSetupAction_Perform_ReposExist(t *testing.T) {
     setupAction.Perform(testmessage.NewTestPrinter())
 
     mockRepo.AssertCloneNotCalled(t, mockWorkSpace.DefaultManifestRepoPath(), manifest.DefaultRepository)
-    mockRepo.AssertCloneNotCalled(t, mockWorkSpace.ConfigManifestRepoPath(), config.FullConfig().ManifestRepoUrl.String())
+    mockRepo.AssertCloneNotCalled(t, mockWorkSpace.ConfigManifestRepoPath(), config.FullConfig().ManifestRepoUrl)
 }
 
 func mockRepo() *testrepo.MockRepo {

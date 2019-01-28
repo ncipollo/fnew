@@ -1,6 +1,7 @@
 package action
 
 import (
+    "fmt"
     "github.com/ncipollo/fnew/project"
     "github.com/ncipollo/fnew/transform"
     "github.com/ncipollo/fnew/message"
@@ -48,6 +49,10 @@ func (action *TransformAction) Perform(output message.Printer) error {
         return err
     }
 
+    if len(transforms) > 0 {
+        output.Println(action.transformMessage())
+    }
+
     err = action.transformer.Apply(transforms, action.variables)
 
     return err
@@ -66,4 +71,8 @@ func (action *TransformAction) createProject() (*project.Project, error) {
 func (action *TransformAction) createTransforms(project project.Project) ([]transform.Transform, error) {
     factory := transform.NewFactory()
     return factory.Transforms(project.Transforms)
+}
+
+func (action *TransformAction) transformMessage() string {
+    return fmt.Sprintf("Applying Transforms")
 }

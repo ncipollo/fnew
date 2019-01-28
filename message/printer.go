@@ -15,7 +15,7 @@ type standardPrinter struct {
 }
 
 func (writer *standardPrinter) Println(message string) {
-    fmt.Fprintln(writer.output, message)
+    _, _ = fmt.Fprintln(writer.output, message)
 }
 
 func NewStandardWriter() Printer {

@@ -9,10 +9,10 @@ import (
 
 const cleanupActionPath = "/test"
 
-func TestCleanupAction_Perform_FailsOnDeleteError(t *testing.T) {
+func TestCleanupRepoAction_Perform_FailsOnDeleteError(t *testing.T) {
     mockRepo := testrepo.NewMockRepo()
     printer := testmessage.NewTestPrinter()
-    action := NewCleanupAction(cleanupActionPath, mockRepo)
+    action := NewCleanupRepoAction(cleanupActionPath, mockRepo)
 
     mockRepo.StubDelete(true)
     mockRepo.StubInit(false)
@@ -21,10 +21,10 @@ func TestCleanupAction_Perform_FailsOnDeleteError(t *testing.T) {
     assert.Error(t, err)
 }
 
-func TestCleanupAction_Perform_FailsOnInitError(t *testing.T) {
+func TestCleanupRepoAction_Perform_FailsOnInitError(t *testing.T) {
     mockRepo := testrepo.NewMockRepo()
     printer := testmessage.NewTestPrinter()
-    action := NewCleanupAction(cleanupActionPath, mockRepo)
+    action := NewCleanupRepoAction(cleanupActionPath, mockRepo)
 
     mockRepo.StubDelete(false)
     mockRepo.StubInit(true)
@@ -33,10 +33,10 @@ func TestCleanupAction_Perform_FailsOnInitError(t *testing.T) {
     assert.Error(t, err)
 }
 
-func TestCleanupAction_Perform_Success(t *testing.T) {
+func TestCleanupRepoAction_Perform_Success(t *testing.T) {
     mockRepo := testrepo.NewMockRepo()
     printer := testmessage.NewTestPrinter()
-    action := NewCleanupAction(cleanupActionPath, mockRepo)
+    action := NewCleanupRepoAction(cleanupActionPath, mockRepo)
 
     mockRepo.StubDelete(false)
     mockRepo.StubInit(false)

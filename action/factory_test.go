@@ -19,11 +19,11 @@ func TestFactory_Create(t *testing.T) {
     assert.Equal(t, action, factory.Create())
 }
 
-func TestFactory_Cleanup(t *testing.T) {
+func TestFactory_CleanupRepo(t *testing.T) {
     factory := createFactory()
 
-    action := NewCleanupAction(factory.LocalPath, factory.repo)
-    assert.Equal(t, action, factory.Cleanup())
+    action := NewCleanupRepoAction(factory.LocalPath, factory.repo)
+    assert.Equal(t, action, factory.CleanupRepo())
 }
 
 func TestFactory_List(t *testing.T) {

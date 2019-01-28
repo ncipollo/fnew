@@ -70,8 +70,8 @@ func (factory *Factory) Create() Action {
     return action
 }
 
-func (factory *Factory) Cleanup() Action {
-    action := NewCleanupAction(factory.LocalPath, factory.repo)
+func (factory *Factory) CleanupRepo() Action {
+    action := NewCleanupRepoAction(factory.LocalPath, factory.repo)
     return action
 }
 

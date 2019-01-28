@@ -62,7 +62,7 @@ func (Parser) createCommand(actionFactory *action.Factory) Command {
         actionFactory.Setup(),
         actionFactory.Create(),
         actionFactory.Transform(),
-        actionFactory.Cleanup())
+        actionFactory.CleanupRepo())
 }
 
 func (Parser) listCommand(actionFactory *action.Factory) Command {

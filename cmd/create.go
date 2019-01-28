@@ -52,15 +52,15 @@ func (command *CreateCommand) Run(printer message.Printer) error {
         return err
     }
 
-    err = command.transformAction.Perform(printer)
-    if err != nil {
-        printer.Println(command.transformErrorMessage(err))
-        return err
-    }
-
     err = command.cleanupAction.Perform(printer)
     if err != nil {
         printer.Println(command.cleanupErrorMessage(err))
+        return err
+    }
+
+    err = command.transformAction.Perform(printer)
+    if err != nil {
+        printer.Println(command.transformErrorMessage(err))
         return err
     }
 

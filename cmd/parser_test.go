@@ -6,6 +6,8 @@ import (
     "github.com/stretchr/testify/assert"
 )
 
+const fnewVersion = "1.0"
+
 func TestParser_Parse_CreateCommand(t *testing.T) {
     parser := setupParser("project", "/")
 
@@ -41,7 +43,14 @@ func TestParser_Parse_UpdateCommand_Shorthand(t *testing.T) {
     assert.IsType(t, &UpdateCommand{}, cmd)
 }
 
+func TestParser_Parse_VersionCommand(t *testing.T) {
+    parser := setupParser("--version")
+
+    cmd := parser.Parse()
+    assert.IsType(t, &VersionCommand{}, cmd)
+}
+
 func setupParser(args ...string) *Parser {
     os.Args = append([]string{"fnew"}, args...)
-    return NewParser([]string{})
+    return NewParser([]string{}, fnewVersion)
 }

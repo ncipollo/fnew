@@ -6,8 +6,10 @@ import (
     "github.com/ncipollo/fnew/message"
 )
 
+var version = "0.1"
+
 func main() {
-    parser := cmd.NewParser(os.Environ())
+    parser := cmd.NewParser(os.Environ(), version)
     command := parser.Parse()
     if command != nil {
         printer := message.NewStandardWriter()

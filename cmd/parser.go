@@ -11,33 +11,38 @@ import (
 const listUsage = "lists the available fnew projects"
 const updateUsage = "updates the fnew project list"
 const verboseUsage = "enables verbose output"
+const versionUsage = "prints fnew version"
 const shortHandSuffix = " (shorthand)"
 
 type Parser struct {
-    env  []string
-    flag *flag.FlagSet
+    env     []string
+    flag    *flag.FlagSet
+    version string
 }
 
-func NewParser(env []string) *Parser {
+func NewParser(env []string, version string) *Parser {
     name := os.Args[0]
     flagSet := flag.NewFlagSet(name, flag.ExitOnError)
     flagSet.Usage = func() {
-        fmt.Fprintf(flagSet.Output(),
+        _, _ = fmt.Fprintf(flagSet.Output(),
             "Usage: %s [OPTIONS] <source project> <project location>\n",
             name)
         flagSet.PrintDefaults()
     }
-    return &Parser{env: env, flag: flagSet}
+    return &Parser{env: env, flag: flagSet, version: version}
 }
 
 func (parser *Parser) Parse() Command {
     list := parser.setupListFlag()
     update := parser.setupUpdateFlag()
     verbose := parser.setupVerbose()
+    version := parser.setupVersion()
 
-    parser.flag.Parse(os.Args[1:])
+    _ = parser.flag.Parse(os.Args[1:])
 
-    if *list {
+    if *version {
+        return parser.versionCommand()
+    } else if *list {
         actionFactory := action.NewFactory("", "", *verbose)
         return parser.listCommand(actionFactory)
     } else if *update {
@@ -71,6 +76,10 @@ func (Parser) listCommand(actionFactory *action.Factory) Command {
 
 func (Parser) updateCommand(actionFactory *action.Factory) Command {
     return NewUpdateCommand(actionFactory.Setup(), actionFactory.Update())
+}
+
+func (parser *Parser) versionCommand() Command {
+    return NewVersionCommand(parser.version)
 }
 
 func (parser *Parser) projectName() string {
@@ -107,6 +116,13 @@ func (parser *Parser) setupVerbose() *bool {
     var verbose bool
     parser.flag.BoolVar(&verbose, "verbose", false, verboseUsage)
     parser.flag.BoolVar(&verbose, "v", false, verboseUsage+shortHandSuffix)
+
+    return &verbose
+}
+
+func (parser *Parser) setupVersion() *bool {
+    var verbose bool
+    parser.flag.BoolVar(&verbose, "version", false, versionUsage)
 
     return &verbose
 }

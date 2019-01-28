@@ -60,15 +60,17 @@ func TestCreateAction_Perform_RepoCloneFails(t *testing.T) {
 func TestCreateAction_Perform_Success(t *testing.T) {
     localChecker := localPathChecker(false)
     actionRepo := createActionRepo(false)
+    output := testmessage.NewTestPrinter()
     createAction := NewCreateAction(localChecker,
         localPath,
         createActionManifestMerger,
         manifest.MockProject1,
         actionRepo)
 
-    err := createAction.Perform(testmessage.NewTestPrinter())
+    err := createAction.Perform(output)
 
     assert.NoError(t, err)
+    output.AssertMessage(t, createAction.fetchMessage())
 }
 
 func localPathChecker(exists bool) workspace.DirectoryChecker {

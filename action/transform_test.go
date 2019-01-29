@@ -29,12 +29,15 @@ func TestTransformAction_Perform_FailsOnTransformerError(t *testing.T) {
 }
 
 func TestTransformAction_Perform_Success(t *testing.T) {
+    output := testmessage.NewTestPrinter()
     action, transformer := createTransformActionTestObjects(true, nil, nil)
 
-    err := action.Perform(testmessage.NewTestPrinter())
+    err := action.Perform(output)
 
     assert.NoError(t, err)
     transformer.AssertExpectations(t)
+    output.AssertMessage(t, action.transformMessage())
+
 }
 
 func TestTransformAction_Perform_Success_NoProject(t *testing.T) {

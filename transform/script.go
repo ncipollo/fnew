@@ -84,5 +84,12 @@ func NewCommandRunner() CommandRunner {
 }
 
 func (osCommandRunner) RunCommand(cmd exec.Cmd) error {
-    return cmd.Run()
+    stdoutStderr, err := cmd.CombinedOutput()
+    if err != nil {
+        return err
+    }
+
+    fmt.Printf("%s\n", stdoutStderr)
+
+    return nil
 }

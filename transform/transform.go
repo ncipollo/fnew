@@ -74,3 +74,7 @@ func (variables Variables) AddEnv() {
         variables[key] = value
     }
 }
+
+func (variables Variables) AddProjectName(projectName string) {
+    variables["PROJECT_NAME"] = projectName
+}

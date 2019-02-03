@@ -2,6 +2,8 @@ package transform
 
 import (
     "github.com/stretchr/testify/assert"
+    "os"
+    "strings"
     "testing"
 )
 
@@ -27,4 +29,22 @@ func TestStringReplace_Replace_OldVariable(t *testing.T) {
     variables["VAR"] = "foo"
     stringReplace := StringReplace{Old: "$VAR", New: "bar"}
     assert.Equal(t, "should be bar", stringReplace.Replace("should be foo", variables))
+}
+
+func TestVariables_AddEnv(t *testing.T) {
+    variables := NewVariables()
+    variables.AddEnv()
+    for _, env := range os.Environ() {
+        parts := strings.Split(env, "=")
+        key := parts[0]
+        value := parts[1]
+        assert.Equal(t,value, variables[key])
+    }
+}
+
+func TestVariables_AddProjectName(t *testing.T) {
+    projectName := "project"
+    variables := NewVariables()
+    variables.AddProjectName(projectName)
+    assert.Equal(t,projectName, variables["PROJECT_NAME"])
 }

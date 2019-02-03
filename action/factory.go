@@ -45,6 +45,7 @@ func NewFactory(localPath string, projectName string, verbose bool) *Factory {
 
     variables := transform.NewVariables()
     variables.AddEnv()
+    variables.AddProjectName(projectName)
 
     return &Factory{
         LocalPath:     localPath,

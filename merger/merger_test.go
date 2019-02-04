@@ -11,7 +11,7 @@ import (
     "testing"
 )
 
-const configProject = "config"
+const configProject = "project1"
 const defaultProject = "default"
 
 var configUrl = "http://www.example/config.com"
@@ -32,7 +32,7 @@ func TestWorkspaceManifestMerger_ErrorLoadingManifestsReturnEmptyManifest(t *tes
 }
 
 func TestWorkspaceManifestMerger_MergedManifest(t *testing.T) {
-    configLoader := config.MockLoaderWithoutRepoUrl()
+    configLoader := config.MockLoaderWithRepoUrl()
     currentWorkspace := workspace.CreateMockWorkSpace(workspace.CreateMockDirectoryChecker(true),
         workspace.CreateMockDirectoryCreator(false))
     manifestLoader := mockLoaderWithBothManifests(&currentWorkspace)
@@ -41,7 +41,7 @@ func TestWorkspaceManifestMerger_MergedManifest(t *testing.T) {
     mergedManifest := merger.MergedManifest()
 
     expectedManifest := &manifest.Manifest{
-        configProject:  configUrl,
+        configProject:  "http://www.example.com",
         defaultProject: defaultUrl,
     }
 

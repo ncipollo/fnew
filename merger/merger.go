@@ -28,7 +28,7 @@ func (merger WorkspaceManifestMerger) MergedManifest() *manifest.Manifest {
     configManifest := merger.configManifest()
     configRepoManifest := merger.configRepoManifest()
 
-    mergedManifest := defaultManifest.Merge(*configManifest).Merge(*configRepoManifest)
+    mergedManifest := defaultManifest.Merge(*configRepoManifest).Merge(*configManifest)
     return &mergedManifest
 }
 

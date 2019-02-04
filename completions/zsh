@@ -1,0 +1,7 @@
+#compdef _fnew fnew
+
+function _fnew {
+    _arguments -C \
+    "-h[Show help information]" \
+    "--h[Show help information]"
+}

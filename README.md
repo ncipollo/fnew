@@ -43,6 +43,6 @@ Here's what each key represents:
 * manifest: (Optional) local manifest. The left hand key represents the project name (what you will pass to fnew) and the right hand value points to the git url of the project.
 
 If a project is defined in multiple places the following order of precedence takes place:
-* Projects define in your local configuration manifest (these will always take precedence over other projects).
+* Projects found in your local configuration manifest (these will always take precedence over other projects).
 * Projects found in the manifest repository defined in your configuration file.
 * Projects found in the default manifest.

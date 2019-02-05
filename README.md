@@ -46,3 +46,40 @@ If a project is defined in multiple places the following order of precedence tak
 * Projects found in your local configuration manifest (these will always take precedence over other projects).
 * Projects found in the manifest repository defined in your configuration file.
 * Projects found in the default manifest.
+
+# Project Transforms
+
+A project may be configured to apply a series of transforms after it is fetched. The transforms are define in a file named `.fnew ` and is located in the root of the project repository. And example may be found here: [.fnew file](https://github.com/file-new/fnew-test-project/blob/master/.fnew)
+
+The project configuration file has the following format:
+```json
+{
+    "transforms": [
+        {
+            "transform_argument": "value",
+            "type": "type_of_transform"
+        },
+        {
+            ...
+        }
+    ]
+}
+```
+
+The next sections will cover the types of transforms supported by fnew.
+
+## Input Transform
+**Description**: This input allows the user to enter a value for a variable. It will prompt the user to input this during the transformation phase of project setup. The user will be accessible in other transforms via $<variable_name>
+
+```json
+{
+    "output_variable": "variable_name",
+    "skip_if_variable_exists": true,
+    "type": "input"
+}
+```
+Keys:
+* *output_variable*: The variable for the user to set.
+* *skip_if_variable_exists*: When true this transform will be skipped if the variable already exists.
+
+

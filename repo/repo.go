@@ -36,7 +36,7 @@ func (repo *GitRepo) Clone(localPath string, repoUrl string) (*git.Repository, e
     return git.PlainClone(localPath, false, &git.CloneOptions{
         Auth:              auth,
         URL:               repoUrl,
-        RecurseSubmodules: git.DefaultSubmoduleRecursionDepth,
+        RecurseSubmodules: git.NoRecurseSubmodules,
         Progress:          repo.progress(),
     })
 }

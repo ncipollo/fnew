@@ -154,7 +154,3 @@ Keys:
 * **string_prefix**: An optional prefix to prepend to the variable.
 * **string_replace**: Defines the string replace operation. The `old` key defines the string to find and the `new` key defines the string to replace it with. Both `new` and `old` may be set to variables (ex: `package_name`).
 * **string_suffix**: An optional suffix to append to the variable.
-
-## Input Transform
-**Description**: This transform allows the user to enter a value for a variable. It will prompt the user to input this during the transformation phase of project setup. The user will be accessible in other transforms via $<variable_name>
-

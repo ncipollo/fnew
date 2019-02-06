@@ -75,16 +75,33 @@ The next sections will cover the types of transforms supported by fnew.
 ```json
 {
     "input_path": "path/to/input",
-    "output_path": path/to/output,
+    "output_path": "path/to/output",
     "type": "file_move"
 }
 ```
 Keys:
-* *input_path*: The path of the file or folder to move. This path is relative to the project folder. This property supports variables (ex: $`PACKAGE_PATH`)
+* *input_path*: The path of the file or folder to move. This path is relative to the project folder. This property supports variables (ex: `$package_name`)
 * *output_path*: The destination of the move. This path is relative to the project folder. This property supports variables (ex: $`PACKAGE_PATH`)
 
+## File String Replace Transform
+**Description**: This transform will apply a string find and replace to the file(s) specified at the input path. 
+
+```json
+{
+    "input_path": "path/to/files/*.java",
+    "string_replace": {
+        "old": "fnew.fnew",
+        "new": "$package_name"
+    },
+    "type": "file_string_replace"
+}
+```
+Keys:
+* *input_path*: The path to the file(s) to apply the string replace on. This path is relative to the project and supports wildcards. This variable does *not* currently support variables.
+* *string_replace*: Defines the string replace operation. The `old` key defines the string to find and the `new` key defines the string to replace it with. Both `new` and `old` may be set to variables (ex: `package_name`).
+
 ## Input Transform
-**Description**: This input allows the user to enter a value for a variable. It will prompt the user to input this during the transformation phase of project setup. The user will be accessible in other transforms via $<variable_name>
+**Description**: This transform allows the user to enter a value for a variable. It will prompt the user to input this during the transformation phase of project setup. The user will be accessible in other transforms via $<variable_name>
 
 ```json
 {

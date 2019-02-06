@@ -22,7 +22,6 @@ Usage: fnew [OPTIONS] <source project> <project location>
 ```
 
 # Project Manifest
-
 fnew keeps track of projects to fetch in manifest files (or repositories). The defauly manifest repository may be found here: 
 [fnew-manifest](https://github.com/file-new/fnew-manifest). Any project found in this repository's manifest may be used without any additional configuration of fnew.
 
@@ -48,7 +47,6 @@ If a project is defined in multiple places the following order of precedence tak
 * Projects found in the default manifest.
 
 # Project Transforms
-
 A project may be configured to apply a series of transforms after it is fetched. The transforms are define in a file named `.fnew ` and is located in the root of the project repository. And example may be found here: [.fnew file](https://github.com/file-new/fnew-test-project/blob/master/.fnew)
 
 The project configuration file has the following format:

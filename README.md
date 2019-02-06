@@ -58,13 +58,30 @@ The project configuration file has the following format:
             "type": "type_of_transform"
         },
         {
-            ...
+           "transform_argument": "value",
+            "type": "type_of_transform"
         }
     ]
 }
 ```
 
+Transform properties can vary between different transform types. You may use variables for many property values by prefixing the property name with `$` (ex- `$FOO`). Properties will be discussed in detail below.
+
 The next sections will cover the types of transforms supported by fnew.
+
+## File Move Transform
+**Description**: This transform will move the file or folder found at the specified input path to the specified output path.
+
+```json
+{
+    "input_path": "path/to/input",
+    "output_path": path/to/output,
+    "type": "file_move"
+}
+```
+Keys:
+* *input_path*: The path of the file or folder to move. This path is relative to the project folder. This property supports variables (ex: $`PACKAGE_PATH`)
+* *output_path*: The destination of the move. This path is relative to the project folder. This property supports variables (ex: $`PACKAGE_PATH`)
 
 ## Input Transform
 **Description**: This input allows the user to enter a value for a variable. It will prompt the user to input this during the transformation phase of project setup. The user will be accessible in other transforms via $<variable_name>
@@ -79,5 +96,3 @@ The next sections will cover the types of transforms supported by fnew.
 Keys:
 * *output_variable*: The variable for the user to set.
 * *skip_if_variable_exists*: When true this transform will be skipped if the variable already exists.
-
-

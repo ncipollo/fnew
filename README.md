@@ -80,8 +80,8 @@ The next sections will cover the types of transforms supported by fnew.
 }
 ```
 Keys:
-* *input_path*: The path of the file or folder to move. This path is relative to the project folder. This property supports variables (ex: `$package_name`)
-* *output_path*: The destination of the move. This path is relative to the project folder. This property supports variables (ex: $`PACKAGE_PATH`)
+* **input_path**: The path of the file or folder to move. This path is relative to the project folder. This property supports variables (ex: `$package_name`)
+* **output_path**: The destination of the move. This path is relative to the project folder. This property supports variables (ex: $`PACKAGE_PATH`)
 
 ## File String Replace Transform
 **Description**: This transform will apply a string find and replace to the file(s) specified at the input path. 
@@ -97,8 +97,8 @@ Keys:
 }
 ```
 Keys:
-* *input_path*: The path to the file(s) to apply the string replace on. This path is relative to the project and supports wildcards. This variable does *not* currently support variables.
-* *string_replace*: Defines the string replace operation. The `old` key defines the string to find and the `new` key defines the string to replace it with. Both `new` and `old` may be set to variables (ex: `package_name`).
+* **input_path**: The path to the file(s) to apply the string replace on. This path is relative to the project and supports wildcards. This variable does *not* currently support variables.
+* **string_replace**: Defines the string replace operation. The `old` key defines the string to find and the `new` key defines the string to replace it with. Both `new` and `old` may be set to variables (ex: `package_name`).
 
 ## Input Transform
 **Description**: This transform allows the user to enter a value for a variable. It will prompt the user to input this during the transformation phase of project setup. The user will be accessible in other transforms via $<variable_name>
@@ -111,5 +111,50 @@ Keys:
 }
 ```
 Keys:
-* *output_variable*: The variable for the user to set.
-* *skip_if_variable_exists*: When true this transform will be skipped if the variable already exists.
+* **output_variable**: The variable for the user to set.
+* **skip_if_variable_exists**: When true this transform will be skipped if the variable already exists.
+
+## Run Script Transform
+**Description**: This transform will run the shell script found at the specified path. **Note**: This transform currently only supports unix (linux & macOS) scripts. It will not work with Windows scripts.
+
+Note: All variables will be passed into the script via environment variables.
+
+```json
+{
+    "arguments" : ["foo","bar"],
+    "input_path": "path/to/script.sh",
+    "type": "run_script"
+}
+```
+Keys:
+* **arguments**: Optional arguments to pass into the script.
+* **input_path**: The path to the script to run. This path is relative to the project and supports wildcards. This variable does supports variables (ex- `$script_path`).
+
+## Variable Replace Transform
+**Description**: This transform will apply a string find and replace to the file(s) specified at the input path. 
+
+```json
+{
+    "input_variable": "input_variable",
+    "output_variable": "output_variable",
+    "skip_if_variable_exists": true,
+    "string_prefix": "optional.",
+    "string_replace": {
+        "old": ".",
+        "new": "/"
+    },
+    "string_suffix": ".optional.txt",
+    "type": "variable_string_replace"
+}
+```
+Keys:
+* **input_variable**: The variable to transform.
+* **output_variable**: The variable name where the transform will place the value after replacing the string(s).
+* **skip_if_variable_exists**: When true this transform will be skipped if the variable already exists.
+* **string_prefix**: An optional prefix to prepend to the variable.
+* **string_replace**: Defines the string replace operation. The `old` key defines the string to find and the `new` key defines the string to replace it with. Both `new` and `old` may be set to variables (ex: `package_name`).
+* **string_suffix**: An optional suffix to append to the variable.
+
+## Input Transform
+**Description**: This transform allows the user to enter a value for a variable. It will prompt the user to input this during the transformation phase of project setup. The user will be accessible in other transforms via $<variable_name>
+

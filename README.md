@@ -154,3 +154,9 @@ Keys:
 * **string_prefix**: An optional prefix to prepend to the variable.
 * **string_replace**: Defines the string replace operation. The `old` key defines the string to find and the `new` key defines the string to replace it with. Both `new` and `old` may be set to variables (ex: `package_name`).
 * **string_suffix**: An optional suffix to append to the variable.
+
+# Transform Variables
+As indicated in the above sections, fnew maintains a list of variables for use within transforms. There are few ways that variables are set in fnew:
+* Provided by the user via the input transform (described in the transform section above)
+* `$PROJECT_NAME` is set to the project name specified by the user when invoking fnew.
+* Environment variables are copied into the internal variables when fnew is run.

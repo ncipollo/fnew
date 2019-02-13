@@ -2,22 +2,20 @@
 
 typeset -A opt_args
 
-function _fnew {
-    _arguments '-h[prints help]' \
-    '-l[lists the available fnew projects]' \
-    '-u[updates the fnew project list]' \
-     '1:project:->projects' \
-     '*:: :->args' \
-     && ret=0
+_arguments '-h[prints help]' \
+'-l[lists the available fnew projects]' \
+'-u[updates the fnew project list]' \
+ '1:project:->projects' \
+ '*:: :->args' \
+ && ret=0
 
-    case "$state" in
-      (projects)
-        projectList=("${(@f)$(fnew -l 2>/dev/null)}")
-        projectList=("${projectList[@]:1}")
-        _describe -t projectList 'command' projectList && ret=0
-      ;;
-      (generator_lists)
-    esac
+case "$state" in
+  (projects)
+    projectList=("${(@f)$(fnew -l 2>/dev/null)}")
+    projectList=("${projectList[@]:1}")
+    _describe -t projectList 'command' projectList && ret=0
+  ;;
+  (generator_lists)
+esac
 
-    return 1
-}
+return 1

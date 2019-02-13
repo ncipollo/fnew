@@ -2,37 +2,19 @@
 
 typeset -A opt_args
 
+projectList=("${(@f)$(fnew -l 2>/dev/null)}")
+
 function _fnew {
-    _arguments -C \
-      '1:cmd:->cmds' \
-      '2:generators:->generator_lists' \
-      '*:: :->args' \
-      && ret=0
+    _arguments '-h[prints help]' \
+    '-l[lists the available fnew projects]' \
+    '-u[updates the fnew project list]' \
+     '1:project:->projects' \
 
     case "$state" in
-      (cmds)
-         local commands; commands=(
-          '-h:prints help' \
-          '-help:prints help' \
-          '-l:lists the available fnew projects' \
-          '-list:lists the available fnew projects' \
-          '-u:updates the fnew project list' \
-          '-update:updates the fnew project list' \
-         )
-
-          _describe -t commands 'command' commands && ret=0
+      (projects)
+          _describe -t projectList 'command' projectList && ret=0
       ;;
       (generator_lists)
-        local generators; generators=(
-          'controller:creates a new controller'
-          'mailer:creates a new mailer'
-          'migration:creates a new migration'
-          'model:creates a new model'
-          'project:create a new Padrino app'
-          'plugin:add plugin to your app'
-        )
-        _describe -t generators 'generator' generators && ret=0
-      ;;
     esac
 
     return 1

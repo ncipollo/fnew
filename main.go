@@ -6,7 +6,7 @@ import (
     "github.com/ncipollo/fnew/message"
 )
 
-var version = "0.1"
+var version = "0.0"
 
 func main() {
     parser := cmd.NewParser(os.Environ(), version)

@@ -8,4 +8,4 @@ deploy:
   file: build/release.tar.gz
   on:
     repo: ncipollo/fnew
-    branch: dev/20/build
+    tags: true

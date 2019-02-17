@@ -1,5 +1,5 @@
 BINARY_NAME=fnew
-BUILD_FOLDER=build
+BUILD_FOLDER=build/release
 LINUX_64_OUTPUT=$(BUILD_FOLDER)/linux64/$(BINARY_NAME)
 MAC_64_OUTPUT=$(BUILD_FOLDER)/mac64/$(BINARY_NAME)
 VERSION=$(shell git describe --abbrev=0)
@@ -19,6 +19,6 @@ build-linux:
 build-mac:
 	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 $(GO_BUILD) $(MAC_64_OUTPUT)
 tar:
-	 tar -zcvf build/build.tar.gz build
+	cd build && tar -zcvf release.tar.gz release
 test:
 	go test -v ./...

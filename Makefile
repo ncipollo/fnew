@@ -6,11 +6,13 @@ MAC_64_OUTPUT=$(BUILD_FOLDER)/mac64/$(BINARY_NAME)
 GO_BUILD=go build -o
 
 
-all: test build
+all: deps test build
 build: build-linux build-mac
 clean:
 	go clean
 	rm -rf build
+deps:
+	go get ./...
 build-linux:
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GO_BUILD) $(LINUX_64_OUTPUT)
 build-mac:

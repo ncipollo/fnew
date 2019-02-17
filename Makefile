@@ -3,7 +3,7 @@ BUILD_FOLDER=build
 LINUX_64_OUTPUT=$(BUILD_FOLDER)/linux64/$(BINARY_NAME)
 MAC_64_OUTPUT=$(BUILD_FOLDER)/mac64/$(BINARY_NAME)
 
-GO_BUILD=go build -o
+GO_BUILD=go build -ldflags "-X main.version=abc" -o
 
 
 all: deps test build

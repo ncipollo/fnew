@@ -76,5 +76,5 @@ func (variables Variables) AddEnv() {
 }
 
 func (variables Variables) AddProjectName(projectName string) {
-    variables["PROJECT_NAME"] = projectName
+    variables["project_name"] = projectName
 }

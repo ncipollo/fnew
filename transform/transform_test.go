@@ -46,5 +46,5 @@ func TestVariables_AddProjectName(t *testing.T) {
     projectName := "project"
     variables := NewVariables()
     variables.AddProjectName(projectName)
-    assert.Equal(t,projectName, variables["PROJECT_NAME"])
+    assert.Equal(t,projectName, variables["project_name"])
 }

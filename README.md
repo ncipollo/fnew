@@ -1,6 +1,4 @@
 # fnew
-[![Build Status](https://travis-ci.com/ncipollo/fnew.svg?branch=master)](https://travis-ci.com/ncipollo/fnew)
-
 fnew allows you to quickly fetch a project, then apply a series of transforms on it. After the transforms complete the project should be setup and ready to be imported into your favorite IDE!
 
 # Usage
@@ -47,7 +45,7 @@ If a project is defined in multiple places the following order of precedence tak
 * Projects found in the default manifest.
 
 # Project Transforms
-A project may be configured to apply a series of transforms after it is fetched. The transforms are define in a file named `.fnew ` and is located in the root of the project repository. And example may be found here: [.fnew file](https://github.com/file-new/fnew-test-project/blob/master/.fnew)
+A project may be configured to apply a series of transforms after it is fetched. The transforms are define in a file named `.fnew ` and is located in the root of the project repository. And example may be found here: [.fnew file](https://github.com/file-new/fnew-test-project/blob/main/.fnew)
 
 The project configuration file has the following format:
 ```json
